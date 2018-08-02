@@ -1,3 +1,6 @@
+#ifndef STATE_H
+#define STATE_H
+
 // main memory
 extern char* mem;
 
@@ -28,3 +31,5 @@ extern short r_pc; // program counter
 extern char r_sp; // stack pointer
 extern char r_dt; // delay timer
 extern char r_st; // sound timer
+
+#endif

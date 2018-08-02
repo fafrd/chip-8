@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "state.c"
+#include "disassembler.h"
+#include "state.h"
 
-void readFile(char *filename, char **buffer, int *length)
+void readFile(char *filename, char **buffer, size_t *length)
 {
 	FILE *f = fopen(filename, "r");
 
@@ -15,7 +16,7 @@ void readFile(char *filename, char **buffer, int *length)
 	fclose(f);
 }
 
-void printBytes(char *buffer, int length)
+void printBytes(char *buffer, size_t length)
 {
 	for (int i = 0; i < length; i++)
 	{

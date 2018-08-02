@@ -34,3 +34,9 @@ void initializeState()
 	r_dt = 0;
 	r_st = 0;
 }
+
+// prints contents of mem to screen for debugging
+void printMem()
+{
+	// TODO
+}
