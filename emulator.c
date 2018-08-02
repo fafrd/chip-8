@@ -3,7 +3,7 @@
 #include <string.h>
 #include "disassembler.h"
 #include "state.h"
-/*
+
 // copies buffer to mem starting at mem[0x200]
 // returns 0 on success
 int loadRomToMemory(char **buffer, size_t length)
@@ -15,7 +15,6 @@ int loadRomToMemory(char **buffer, size_t length)
 
 	return 0;
 }
-*/
 
 // main instruction processing loop
 void loop(void *location)
@@ -32,14 +31,14 @@ int main(int argc, char *argv[])
 	}
 
 	// Initialize registers, memory
-//	initializeState();
+	initializeState();
 
 	// read romfile into buffer
 	char *buffer;
 	size_t length;
 	readFile(argv[1], &buffer, &length);
 
-	int loadSuccess = 9;//loadRomToMemory(&buffer, length);
+	int loadSuccess = loadRomToMemory(&buffer, length);
 	if (loadSuccess != 0)
 	{
 		printf("%s", "error: ROM size greater than 0xc8f bytes\n");

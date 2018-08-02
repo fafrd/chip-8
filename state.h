@@ -1,6 +1,9 @@
 #ifndef STATE_H
 #define STATE_H
 
+void initializeState();
+void printMem();
+
 // main memory
 extern char* mem;
 
