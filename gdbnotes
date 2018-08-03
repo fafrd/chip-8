@@ -1,0 +1,5 @@
+set breakpoint on line 14
+b 14
+
+print first 8 bytes of **buffer char array
+x/8xb *buffer

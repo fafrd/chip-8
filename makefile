@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-I.
+CFLAGS=-I. -g
 DEPS = disassembler.h state.h
 OBJ = emulator.o disassembler.o state.o
 

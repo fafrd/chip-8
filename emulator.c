@@ -10,9 +10,7 @@ int loadRomToMemory(char **buffer, size_t length)
 {
 	if (length > 0xc8f)
 		return 1; // rom too big
-
-	memcpy((&mem + 0x200), *buffer, length);
-
+	memcpy((mem + 0x200), *buffer, length);
 	return 0;
 }
 
