@@ -3,3 +3,6 @@ b 14
 
 print first 8 bytes of **buffer char array
 x/8xb *buffer
+
+print non-pointer variable as hex
+p/x variable
