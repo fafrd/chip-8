@@ -20,7 +20,15 @@ void printBytes(char *buffer, size_t length)
 {
 	for (int i = 0; i < length; i++)
 	{
-		printf("%hhx ", buffer[i]);
+		if (i && i % 8 == 0)
+			printf("\n");
+		if (!(i % 8 == 0) && (i % 2 == 0))
+			printf("\t");
+		//printf("%hhx ", buffer[i]);
+		char current_upper = buffer[i++];
+		char current_lower = buffer[i];
+		short current = (((short)current_upper) << 8) | current_lower;
+		printf("%hhx %hhx: %hx", current_upper, current_lower, current);
 	}
 
 	printf("%c", '\n');
