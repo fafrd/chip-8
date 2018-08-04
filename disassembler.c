@@ -27,7 +27,7 @@ void printBytes(char *buffer, size_t length)
 		//printf("%hhx ", buffer[i]);
 		char current_upper = buffer[i++];
 		char current_lower = buffer[i];
-		short current = (((short)current_upper) << 8) | current_lower;
+		short current = (((short)current_upper) << 8) | (0x00ff & current_lower);
 		printf("%hhx %hhx: %hx", current_upper, current_lower, current);
 	}
 

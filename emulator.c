@@ -28,7 +28,7 @@ void loop()
 		// instructions are 2 bytes, get upper+lower byte, combine
 		current_upper = mem[r_pc];
 		current_lower = mem[r_pc+1];
-		current = (((short)current_upper) << 8) | current_lower;
+		current = (((short)current_upper) << 8) | (0x00ff & current_lower);
 
 		printf("pc: %hx, instruction: %hx\n", r_pc, current);
 
