@@ -1,12 +1,13 @@
 todo:
 - implement immediate store/load instructions, 6xnn and 8yx0
-- implement memory store/load instructions, fx55 fx65
 - implement add/subtract, 8xy4 8xy5 8xy7
 - implement and or xor, 8xy2 8xy1 8xy3
 - implement shift left/right, 8xy6 8xye
 - implement jumps, 1nnn bnnn
 - implement subroutine handling, 2nnn 00ee 0nnn
 - implement branching, 3xnn 5xy0 4xnn 9xy0
+- implement i-register instructions, annn fx1e
+- implement memory store/load instructions, fx55 fx65
 
 backlog:
 - implement random, cxnn
@@ -16,7 +17,6 @@ backlog:
 - implement sound timer, fx18
 - implement keypad input mechanism. (at the top of loop, check if key is pressed?)
 - implement keypad instructions, fx0a ex9e exa1
-- implement i-register instructions, annn fx1e
 - create graphics area (64x32). chip does not specify what this should look like in memory. i'll probably just do a 256byte array, where each pixel = 1 bit
 - implement clear screen instruction, 00e0
 - load default hex sprites to memory 0x000-0x200

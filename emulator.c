@@ -51,18 +51,24 @@ void loop()
 				{
 					// TODO 00ee - return from subroutine
 				}
+
+				break;
 			}
 			case 0x1:
 			{
 				// jumpDest is bottom 12 bits
 				short jumpDest = current & 0x0fff;
 				// TODO 1nnn - set pc to jumpDest
+
+				break;
 			}
 			case 0x2:
 			{
 				// callDest is bottom 12 bits
 				short callDest = current & 0x0fff;
 				// TODO 2nnn - set pc to callDest and increment sp
+
+				break;
 			}
 			case 0x3:
 			{
@@ -72,6 +78,8 @@ void loop()
 				char byteToCompare = current_lower;
 
 				// TODO 3xnn - if targetReg == byteToCompare, increment pc by 2
+
+				break;
 			}
 			case 0x4:
 			{
@@ -81,6 +89,8 @@ void loop()
 				char byteToCompare = current_lower;
 
 				// TODO 4xnn - if targetReg != byteToCompare, increment pc by 2
+
+				break;
 			}
 			case 0x5:
 			{
@@ -90,6 +100,8 @@ void loop()
 				char targetRegY = current_lower >> 4;
 
 				// TODO 5xy0 - if targetRegX == targetRegY, increment pc by 2
+
+				break;
 			}
 			case 0x6:
 			{
@@ -98,6 +110,7 @@ void loop()
 
 				// 6xnn - load current_lower into targetReg
 				i_6xnn(targetReg, current_lower);
+				break;
 			}
 			case 0x7:
 			{
@@ -105,6 +118,7 @@ void loop()
 				char targetReg = current_upper & 0x0f;
 
 				// TODO 7xnn - targetReg = targetReg + current_lower
+				break;
 			}
 			case 0x8:
 			{
@@ -120,52 +134,70 @@ void loop()
 					{
 						// 8xy0 - targetRegX = targetRegY
 						i_8xy0(targetRegX, targetRegY);
+						break;
 					}
 					case 0x1:
 					{
 						// TODO 8xy1 - targetRegX = targetRegX | targetRegY
+
+						break;
 					}
 					case 0x2:
 					{
 						// TODO 8xy2 - targetRegX = targetRegX & targetRegY
 
+						break;
 					}
 					case 0x3:
 					{
 						// TODO 8xy3 - targetRegX = targetRegX ^ targetRegY
+
+						break;
 					}
 					case 0x4:
 					{
-						// TODO 8xy4 - targetRegX = targetRegX + targetRegY
+						// 8xy4 - targetRegX = targetRegX + targetRegY
 						// if the result overflows, set register VF to 1,
 						// and keep lower 8 bits in targetRegX.
 						// else, set register VF to 0
+						i_8xy4(targetRegX, targetRegY);
+						break;
 					}
 					case 0x5:
 					{
-						// TODO 8xy5 - targetRegX = targetRegX - targetRegY
+						// 8xy5 - targetRegX = targetRegX - targetRegY
 						// if X < Y (that is, the result would be less than 0),
 						// set register VF to 1.
 						// else, set register VF to 0
+						i_8xy5(targetRegX, targetRegY);
+						break;
 					}
 					case 0x6:
 					{
 						// TODO 8xy6 - targetRegX = targetRegY >> 1
 						// set register VF to least-significant (shifted away) bit of targetRegY
+
+						break;
 					}
 					case 0x7:
 					{
-						// TODO 8xy7- targetRegX = targetRegY - targetRegX
+						// 8xy7- targetRegX = targetRegY - targetRegX
 						// if X > Y (that is, the result would be less than 0),
 						// set register VF to 1.
 						// else, set register VF to 0
+						i_8xy7(targetRegX, targetRegY);
+						break;
 					}
 					case 0xe:
 					{
 						// TODO 8xye - targetRegX = targetRegY << 1
 						// set register VF to most-significant (shifted away) bit of targetRegY
+
+						break;
 					}
 				}
+
+				break;
 			}
 			case 0x9:
 			{
@@ -175,6 +207,8 @@ void loop()
 				char targetRegY = current_lower >> 4;
 
 				// TODO 9xyn- if targetRegX != targetRegY, increment pc by 2
+
+				break;
 			}
 			case 0xa:
 			{
@@ -182,6 +216,8 @@ void loop()
 				short newValue = current & 0x0fff;
 
 				// TODO annn - set register I to newValue
+
+				break;
 			}
 			case 0xb:
 			{
@@ -189,6 +225,8 @@ void loop()
 				short jumpDest = current & 0x0fff;
 
 				// TODO bnnn - set pc to newValue + register V0
+
+				break;
 			}
 			case 0xc:
 			{
@@ -197,6 +235,8 @@ void loop()
 
 				// TODO cxnn - generate a random byte, then mask it
 				// targetRegisterX = current_lower & (random byte)
+
+				break;
 			}
 			case 0xd:
 			{
@@ -213,6 +253,8 @@ void loop()
 				// sprites are XORed to the screen.
 				// if this causes any pixels to be erased, set register VF to 1, else 0.
 				// sprites positioned outside the display must wrap to the other side.
+
+				break;
 			}
 			case 0xe:
 			{
@@ -229,6 +271,8 @@ void loop()
 					// TODO exa1 - if key corresponding to the value of targetRegX is
 					// currently not pressed, increment pc by 2
 				}
+
+				break;
 			}
 			case 0xf:
 			{
@@ -240,45 +284,65 @@ void loop()
 					case 0x07:
 					{
 						// TODO fx07 - targetRegX = register DT
+
+						break;
 					}
 					case 0x0a:
 					{
 						// TODO fx0a - halt execution until any key is pressed, then
 						// store the value of that key in targetRegisterX
+
+						break;
 					}
 					case 0x15:
 					{
 						// TODO fx15 - register DT = targetRegX
+
+						break;
 					}
 					case 0x18:
 					{
 						// TODO fx18 - register ST = targetRegX
+
+						break;
 					}
 					case 0x1e:
 					{
 						// TODO fx1e - register i = register i + targetRegX
+
+						break;
 					}
 					case 0x29:
 					{
 						// TODO fx29 - register i = location of sprite specified by targetRegX
 						// (not fully sure what this means yet)
+
+						break;
 					}
 					case 0x33:
 					{
 						// TODO fx33 - store binary coded decimal representation of
 						// targetRegX in memory locations i, i+1, i+2
+
+						break;
 					}
 					case 0x55:
 					{
 						// TODO fx55 - store registers v0 through targetRegX in memory
 						// starting at location i
+
+						break;
 					}
 					case 0x65:
 					{
 						// TODO fx65 - read registers v0 through targetRegX from memory
 						// starting at location i
+
+						break;
 					}
 				}
+
+				break;
 			}
 		}
 
