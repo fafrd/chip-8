@@ -4,6 +4,7 @@
 #include "disassembler.h"
 #include "state.h"
 #include "instructions.h"
+#include "util.h"
 
 // copies buffer to mem starting at mem[0x200]
 // returns 0 on success
@@ -34,12 +35,12 @@ void loop()
 		printf("pc: %hx, instruction: %hx\n", r_pc, current);
 
 		// switch on first nibble (4 bits)
-		switch (current_upper >> 4)
+		switch ((current_upper >> 4) & 0x0f)
 		{
 			case 0x0:
 			{
 				// special instruction to exit for debugging (delete this later)
-				if (current == 0x0099)
+				if (current == 0x0033)
 					return;
 
 				if (current == 0x00e0)
@@ -317,9 +318,12 @@ int main(int argc, char *argv[])
 	}
 
 	// start main program processing loop
-	//loop();
+	loop();
 
-	printBytes(buffer, length);
+	printf("execution complete. register dump:\n");
+	dumpRegs();
+
+	//printBytes(buffer, length);
 
 	free(buffer);
 	return 0;

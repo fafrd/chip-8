@@ -5,6 +5,8 @@
 void dumpMem()
 {
 	// TODO
+
+	printf("\n");
 }
 
 void dumpRegs()
@@ -15,9 +17,10 @@ void dumpRegs()
 	printf("v8:\t%x\tv9:\t%x\tva:\t%x\tvb:\t%x\t\n", r_v8, r_v9, r_va, r_vb);
 	printf("vc:\t%x\tvd:\t%x\tve:\t%x\tvf:\t%x\t\n", r_vc, r_vd, r_ve, r_vf);
 
-	printf("pc:\t%x\n", r_pc);
-	printf("sp:\t%x\n", r_sp);
+	printf("pc:\t%x\tsp:\t%x\n", r_pc, r_sp);
 	printf("dt:\t%x\tst:\t%x\t", r_dt, r_st);
+
+	printf("\n");
 }
 
 char* getVxReg(char x)
