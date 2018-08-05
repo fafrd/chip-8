@@ -3,6 +3,7 @@
 #include <string.h>
 #include "disassembler.h"
 #include "state.h"
+#include "instructions.h"
 
 // copies buffer to mem starting at mem[0x200]
 // returns 0 on success
@@ -37,6 +38,10 @@ void loop()
 		{
 			case 0x0:
 			{
+				// special instruction to exit for debugging (delete this later)
+				if (current == 0x0099)
+					return;
+
 				if (current == 0x00e0)
 				{
 					// TODO 00e0 - clear screen
@@ -90,7 +95,8 @@ void loop()
 				// target register is second nibble
 				char targetReg = current_upper & 0x0f;
 
-				// TODO 6xnn - load current_lower into targetReg
+				// 6xnn - load current_lower into targetReg
+				i_6xnn(targetReg, current_lower);
 			}
 			case 0x7:
 			{
@@ -111,7 +117,8 @@ void loop()
 				{
 					case 0x0:
 					{
-						// TODO 8xy0 - targetRegX = targetRegY
+						// 8xy0 - targetRegX = targetRegY
+						i_8xy0(targetRegX, targetRegY);
 					}
 					case 0x1:
 					{
@@ -187,7 +194,7 @@ void loop()
 				// target register x is second nibble
 				char targetRegX = current_upper & 0x0f;
 
-				// TODO cxnn - generate a random byte
+				// TODO cxnn - generate a random byte, then mask it
 				// targetRegisterX = current_lower & (random byte)
 			}
 			case 0xd:
