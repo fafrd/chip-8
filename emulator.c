@@ -176,7 +176,7 @@ void loop()
 					{
 						// TODO 8xy6 - targetRegX = targetRegY >> 1
 						// set register VF to least-significant (shifted away) bit of targetRegY
-
+						i_8xy6(targetRegX, targetRegY);
 						break;
 					}
 					case 0x7:
@@ -192,7 +192,7 @@ void loop()
 					{
 						// TODO 8xye - targetRegX = targetRegY << 1
 						// set register VF to most-significant (shifted away) bit of targetRegY
-
+						i_8xye(targetRegX, targetRegY);
 						break;
 					}
 				}
