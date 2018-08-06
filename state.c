@@ -2,31 +2,31 @@
 #include <stdlib.h>
 #include "state.h"
 
-char *mem;
-short *stack;
+unsigned char *mem;
+unsigned short *stack;
 
-short r_i;
-char r_v0;
-char r_v1;
-char r_v2;
-char r_v3;
-char r_v4;
-char r_v5;
-char r_v6;
-char r_v7;
-char r_v8;
-char r_v9;
-char r_va;
-char r_vb;
-char r_vc;
-char r_vd;
-char r_ve;
-char r_vf;
+unsigned short r_i;
+unsigned char r_v0;
+unsigned char r_v1;
+unsigned char r_v2;
+unsigned char r_v3;
+unsigned char r_v4;
+unsigned char r_v5;
+unsigned char r_v6;
+unsigned char r_v7;
+unsigned char r_v8;
+unsigned char r_v9;
+unsigned char r_va;
+unsigned char r_vb;
+unsigned char r_vc;
+unsigned char r_vd;
+unsigned char r_ve;
+unsigned char r_vf;
 
-short r_pc;
-char r_sp;
-char r_dt;
-char r_st;
+unsigned short r_pc;
+unsigned char r_sp;
+unsigned char r_dt;
+unsigned char r_st;
 	
 void initializeState()
 {

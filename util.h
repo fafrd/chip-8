@@ -1,7 +1,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-char* getVxReg(char);
+unsigned char* getVxReg(unsigned char);
 void dumpMem();
 void dumpRegs();
 

@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-I. -g
+CFLAGS=-I. -g -Wsign-conversion
 DEPS = disassembler.h state.h instructions.h util.h
 OBJ = emulator.o disassembler.o state.o instructions.o util.o
 

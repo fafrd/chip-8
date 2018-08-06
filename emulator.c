@@ -8,7 +8,7 @@
 
 // copies buffer to mem starting at mem[0x200]
 // returns 0 on success
-int loadRomToMemory(char **buffer, size_t length)
+int loadRomToMemory(unsigned char **buffer, size_t length)
 {
 	if (length > 0xc8f)
 		return 1; // rom too big
@@ -21,8 +21,8 @@ void loop()
 {
 	// program starts at 0x200
 	r_pc = 0x200;
-	char current_upper, current_lower;
-	short current;
+	unsigned char current_upper, current_lower;
+	unsigned short current;
 
 	while (1)
 	{
@@ -30,12 +30,12 @@ void loop()
 		// instructions are 2 bytes, get upper+lower byte, combine
 		current_upper = mem[r_pc];
 		current_lower = mem[r_pc+1];
-		current = (((short)current_upper) << 8) | (0x00ff & current_lower);
+		current = (((short)current_upper) << 8) | current_lower;
 
 		printf("pc: %hx, instruction: %hx\n", r_pc, current);
 
 		// switch on first nibble (4 bits)
-		switch ((current_upper >> 4) & 0x0f)
+		switch (current_upper >> 4)
 		{
 			case 0x0:
 			{
@@ -57,7 +57,7 @@ void loop()
 			case 0x1:
 			{
 				// jumpDest is bottom 12 bits
-				short jumpDest = current & 0x0fff;
+				unsigned short jumpDest = current & 0x0fff;
 				// TODO 1nnn - set pc to jumpDest
 
 				break;
@@ -65,7 +65,7 @@ void loop()
 			case 0x2:
 			{
 				// callDest is bottom 12 bits
-				short callDest = current & 0x0fff;
+				unsigned short callDest = current & 0x0fff;
 				// TODO 2nnn - set pc to callDest and increment sp
 
 				break;
@@ -73,9 +73,9 @@ void loop()
 			case 0x3:
 			{
 				// target register is second nibble
-				char targetReg = current_upper & 0x0f;
+				unsigned char targetReg = current_upper & 0x0f;
 				// compare register with the last byte
-				char byteToCompare = current_lower;
+				unsigned char byteToCompare = current_lower;
 
 				// TODO 3xnn - if targetReg == byteToCompare, increment pc by 2
 
@@ -84,9 +84,9 @@ void loop()
 			case 0x4:
 			{
 				// target register is second nibble
-				char targetReg = current_upper & 0x0f;
+				unsigned char targetReg = current_upper & 0x0f;
 				// compare register with the last byte
-				char byteToCompare = current_lower;
+				unsigned char byteToCompare = current_lower;
 
 				// TODO 4xnn - if targetReg != byteToCompare, increment pc by 2
 
@@ -95,9 +95,9 @@ void loop()
 			case 0x5:
 			{
 				// target register x is second nibble
-				char targetRegX = current_upper & 0x0f;
+				unsigned char targetRegX = current_upper & 0x0f;
 				// target register y is third nibble
-				char targetRegY = current_lower >> 4;
+				unsigned char targetRegY = current_lower >> 4;
 
 				// TODO 5xy0 - if targetRegX == targetRegY, increment pc by 2
 
@@ -106,7 +106,7 @@ void loop()
 			case 0x6:
 			{
 				// target register is second nibble
-				char targetReg = current_upper & 0x0f;
+				unsigned char targetReg = current_upper & 0x0f;
 
 				// 6xnn - load current_lower into targetReg
 				i_6xnn(targetReg, current_lower);
@@ -115,7 +115,7 @@ void loop()
 			case 0x7:
 			{
 				// target register is second nibble
-				char targetReg = current_upper & 0x0f;
+				unsigned char targetReg = current_upper & 0x0f;
 
 				// TODO 7xnn - targetReg = targetReg + current_lower
 				break;
@@ -123,9 +123,9 @@ void loop()
 			case 0x8:
 			{
 				// target register x is second nibble
-				char targetRegX = current_upper & 0x0f;
+				unsigned char targetRegX = current_upper & 0x0f;
 				// target register y is third nibble
-				char targetRegY = current_lower >> 4;
+				unsigned char targetRegY = current_lower >> 4;
 
 				// switch on last nibble
 				switch (current_lower & 0x0f)
@@ -202,9 +202,9 @@ void loop()
 			case 0x9:
 			{
 				// target register x is second nibble
-				char targetRegX = current_upper & 0x0f;
+				unsigned char targetRegX = current_upper & 0x0f;
 				// target register y is third nibble
-				char targetRegY = current_lower >> 4;
+				unsigned char targetRegY = current_lower >> 4;
 
 				// TODO 9xyn- if targetRegX != targetRegY, increment pc by 2
 
@@ -213,7 +213,7 @@ void loop()
 			case 0xa:
 			{
 				// newValue is bottom 12 bits
-				short newValue = current & 0x0fff;
+				unsigned short newValue = current & 0x0fff;
 
 				// TODO annn - set register I to newValue
 
@@ -222,7 +222,7 @@ void loop()
 			case 0xb:
 			{
 				// jumpDest is bottom 12 bits
-				short jumpDest = current & 0x0fff;
+				unsigned short jumpDest = current & 0x0fff;
 
 				// TODO bnnn - set pc to newValue + register V0
 
@@ -231,7 +231,7 @@ void loop()
 			case 0xc:
 			{
 				// target register x is second nibble
-				char targetRegX = current_upper & 0x0f;
+				unsigned char targetRegX = current_upper & 0x0f;
 
 				// TODO cxnn - generate a random byte, then mask it
 				// targetRegisterX = current_lower & (random byte)
@@ -241,11 +241,11 @@ void loop()
 			case 0xd:
 			{
 				// target register x is second nibble
-				char targetRegX = current_upper & 0x0f;
+				unsigned char targetRegX = current_upper & 0x0f;
 				// target register y is third nibble
-				char targetRegY = current_lower >> 4;
+				unsigned char targetRegY = current_lower >> 4;
 				// n is last nibble
-				char n = current_lower & 0X0f;
+				unsigned char n = current_lower & 0X0f;
 
 				// TODO 0xyn - read n bytes from memory, starting at memory location stored in 
 				// the I register, and draw them as sprites to screen at coordinates specified as
@@ -259,7 +259,7 @@ void loop()
 			case 0xe:
 			{
 				// target register x is second nibble
-				char targetRegX = current_upper & 0x0f;
+				unsigned char targetRegX = current_upper & 0x0f;
 
 				if (current_lower == 0x9e)
 				{
@@ -277,7 +277,7 @@ void loop()
 			case 0xf:
 			{
 				// target register x is second nibble
-				char targetRegX = current_upper & 0x0f;
+				unsigned char targetRegX = current_upper & 0x0f;
 				
 				switch (current_lower)
 				{
@@ -370,7 +370,7 @@ int main(int argc, char *argv[])
 	initializeState();
 
 	// read romfile into buffer
-	char *buffer;
+	unsigned char *buffer;
 	size_t length;
 	readFile(argv[1], &buffer, &length);
 

@@ -3,12 +3,12 @@
 #include "disassembler.h"
 #include "state.h"
 
-void readFile(char *filename, char **buffer, size_t *length)
+void readFile(char *filename, unsigned char **buffer, size_t *length)
 {
 	FILE *f = fopen(filename, "r");
 
 	fseek(f, 0, SEEK_END);
-	*length = ftell(f);
+	*length = (size_t)ftell(f);
 	fseek(f, 0, SEEK_SET);
 
 	*buffer = malloc(*length);
@@ -16,6 +16,7 @@ void readFile(char *filename, char **buffer, size_t *length)
 	fclose(f);
 }
 
+/*
 void printBytes(char *buffer, size_t length)
 {
 	for (int i = 0; i < length; i++)
@@ -33,3 +34,4 @@ void printBytes(char *buffer, size_t length)
 
 	printf("%c", '\n');
 }
+*/

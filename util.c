@@ -11,19 +11,19 @@ void dumpMem()
 
 void dumpRegs()
 {
-	printf("i:\t%x\n", r_i);
-	printf("v0:\t%x\tv1:\t%x\tv2:\t%x\tv3:\t%x\t\n", r_v0, r_v1, r_v2, r_v3);
-	printf("v4:\t%x\tv5:\t%x\tv6:\t%x\tv7:\t%x\t\n", r_v4, r_v5, r_v6, r_v7);
-	printf("v8:\t%x\tv9:\t%x\tva:\t%x\tvb:\t%x\t\n", r_v8, r_v9, r_va, r_vb);
-	printf("vc:\t%x\tvd:\t%x\tve:\t%x\tvf:\t%x\t\n", r_vc, r_vd, r_ve, r_vf);
+	printf("i:\t%hx\n", r_i);
+	printf("v0:\t%hhx\tv1:\t%hhx\tv2:\t%hhx\tv3:\t%hhx\t\n", r_v0, r_v1, r_v2, r_v3);
+	printf("v4:\t%hhx\tv5:\t%hhx\tv6:\t%hhx\tv7:\t%hhx\t\n", r_v4, r_v5, r_v6, r_v7);
+	printf("v8:\t%hhx\tv9:\t%hhx\tva:\t%hhx\tvb:\t%hhx\t\n", r_v8, r_v9, r_va, r_vb);
+	printf("vc:\t%hhx\tvd:\t%hhx\tve:\t%hhx\tvf:\t%hhx\t\n", r_vc, r_vd, r_ve, r_vf);
 
-	printf("pc:\t%x\tsp:\t%x\n", r_pc, r_sp);
-	printf("dt:\t%x\tst:\t%x\t", r_dt, r_st);
+	printf("pc:\t%hx\tsp:\t%hhx\n", r_pc, r_sp);
+	printf("dt:\t%hhx\tst:\t%hhx\t", r_dt, r_st);
 
 	printf("\n");
 }
 
-char* getVxReg(char x)
+unsigned char* getVxReg(unsigned char x)
 {
 	switch (x)
 	{
