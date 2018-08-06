@@ -43,7 +43,7 @@ void i_8xy5(unsigned char x, unsigned char y)
 	unsigned char *vx = getVxReg(x);
 	unsigned char *vy = getVxReg(y);
 
-	printf("%x < %x = %d\n", *vx, *vy, *vx > *vy);
+	//printf("%x < %x = %d\n", *vx, *vy, *vx > *vy);
 
 	if (*vx < *vy)
 		r_vf = 0x01;
@@ -61,7 +61,7 @@ void i_8xy7(unsigned char x, unsigned char y)
 	unsigned char *vx = getVxReg(x);
 	unsigned char *vy = getVxReg(y);
 
-	printf("%x > %x = %d\n", *vx, *vy, *vx > *vy);
+	//printf("%x > %x = %d\n", *vx, *vy, *vx > *vy);
 
 	if (*vx > *vy)
 		r_vf = 0x01;
@@ -70,3 +70,34 @@ void i_8xy7(unsigned char x, unsigned char y)
 
 	*vx = *vy - *vx;
 }
+
+// Set VX to VX AND VY
+void i_8xy2(unsigned char x, unsigned char y)
+{
+	unsigned char *vx = getVxReg(x);
+	unsigned char *vy = getVxReg(y);
+
+	*vx &= *vy;
+}
+
+// Set VX to VX OR VY
+void i_8xy1(unsigned char x, unsigned char y)
+{
+	unsigned char *vx = getVxReg(x);
+	unsigned char *vy = getVxReg(y);
+
+	*vx |= *vy;
+}
+
+// Set VX to VX XOR VY
+void i_8xy3(unsigned char x, unsigned char y)
+{
+	unsigned char *vx = getVxReg(x);
+	unsigned char *vy = getVxReg(y);
+
+	*vx ^= *vy;
+}
+
+
+
+

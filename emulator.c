@@ -139,19 +139,19 @@ void loop()
 					case 0x1:
 					{
 						// TODO 8xy1 - targetRegX = targetRegX | targetRegY
-
+						i_8xy1(targetRegX, targetRegY);
 						break;
 					}
 					case 0x2:
 					{
 						// TODO 8xy2 - targetRegX = targetRegX & targetRegY
-
+						i_8xy2(targetRegX, targetRegY);
 						break;
 					}
 					case 0x3:
 					{
 						// TODO 8xy3 - targetRegX = targetRegX ^ targetRegY
-
+						i_8xy3(targetRegX, targetRegY);
 						break;
 					}
 					case 0x4:
