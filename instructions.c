@@ -27,8 +27,7 @@ void i_8xy4(unsigned char x, unsigned char y)
 	unsigned char *vx = getVxReg(x);
 	unsigned char *vy = getVxReg(y);
 
-	//if ((unsigned short)*vx + (unsigned short)*vy > 0x00ff)
-	if (*vx + *vy > 0x00ff)
+	if (*vx + *vy > 0xff)
 		r_vf = 0x01;
 	else
 		r_vf = 0x00;
@@ -41,7 +40,17 @@ void i_8xy4(unsigned char x, unsigned char y)
 // Set VF to 01 if a borrow does not occur
 void i_8xy5(unsigned char x, unsigned char y)
 {
+	unsigned char *vx = getVxReg(x);
+	unsigned char *vy = getVxReg(y);
 
+	printf("%x < %x = %d\n", *vx, *vy, *vx > *vy);
+
+	if (*vx < *vy)
+		r_vf = 0x01;
+	else
+		r_vf = 0x00;
+
+	*vx = *vx - *vy;
 }
 
 // Set register VX to the value of VY minus VX
@@ -49,5 +58,15 @@ void i_8xy5(unsigned char x, unsigned char y)
 // Set VF to 01 if a borrow does not occur
 void i_8xy7(unsigned char x, unsigned char y)
 {
+	unsigned char *vx = getVxReg(x);
+	unsigned char *vy = getVxReg(y);
 
+	printf("%x > %x = %d\n", *vx, *vy, *vx > *vy);
+
+	if (*vx > *vy)
+		r_vf = 0x01;
+	else
+		r_vf = 0x00;
+
+	*vx = *vy - *vx;
 }
