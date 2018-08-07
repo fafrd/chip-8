@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h> 
 #include "disassembler.h"
 #include "state.h"
 #include "instructions.h"
@@ -58,7 +59,8 @@ void loop()
 			{
 				// jumpDest is bottom 12 bits
 				unsigned short jumpDest = current & 0x0fff;
-				// TODO 1nnn - set pc to jumpDest
+				// 1nnn - set pc to jumpDest
+				i_1nnn(jumpDest);
 
 				break;
 			}
@@ -138,19 +140,19 @@ void loop()
 					}
 					case 0x1:
 					{
-						// TODO 8xy1 - targetRegX = targetRegX | targetRegY
+						// 8xy1 - targetRegX = targetRegX | targetRegY
 						i_8xy1(targetRegX, targetRegY);
 						break;
 					}
 					case 0x2:
 					{
-						// TODO 8xy2 - targetRegX = targetRegX & targetRegY
+						// 8xy2 - targetRegX = targetRegX & targetRegY
 						i_8xy2(targetRegX, targetRegY);
 						break;
 					}
 					case 0x3:
 					{
-						// TODO 8xy3 - targetRegX = targetRegX ^ targetRegY
+						// 8xy3 - targetRegX = targetRegX ^ targetRegY
 						i_8xy3(targetRegX, targetRegY);
 						break;
 					}
@@ -174,7 +176,7 @@ void loop()
 					}
 					case 0x6:
 					{
-						// TODO 8xy6 - targetRegX = targetRegY >> 1
+						// 8xy6 - targetRegX = targetRegY >> 1
 						// set register VF to least-significant (shifted away) bit of targetRegY
 						i_8xy6(targetRegX, targetRegY);
 						break;
@@ -190,7 +192,7 @@ void loop()
 					}
 					case 0xe:
 					{
-						// TODO 8xye - targetRegX = targetRegY << 1
+						// 8xye - targetRegX = targetRegY << 1
 						// set register VF to most-significant (shifted away) bit of targetRegY
 						i_8xye(targetRegX, targetRegY);
 						break;
@@ -224,7 +226,8 @@ void loop()
 				// jumpDest is bottom 12 bits
 				unsigned short jumpDest = current & 0x0fff;
 
-				// TODO bnnn - set pc to newValue + register V0
+				// bnnn - set pc to newValue + register V0
+				i_bnnn(jumpDest);
 
 				break;
 			}
@@ -350,9 +353,9 @@ void loop()
 		r_pc += 2;
 
 		// if pc > 0xfff, exit program
-		if (r_pc >= 0xfff)
+		if (!validPC(r_pc))
 		{
-			printf("PC is %x; exiting", r_pc);
+			printf("PC is %hx; exiting...\n", r_pc);
 			return;
 		}
 	}

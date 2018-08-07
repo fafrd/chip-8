@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-I. -g -Wsign-conversion
-DEPS = disassembler.h state.h instructions.h util.h
-OBJ = emulator.o disassembler.o state.o instructions.o util.o
+DEPS = util.h disassembler.h state.h instructions.h 
+OBJ = util.o emulator.o disassembler.o state.o instructions.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)

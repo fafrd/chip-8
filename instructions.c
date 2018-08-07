@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "instructions.h"
 #include "state.h"
 #include "util.h"
@@ -112,7 +113,7 @@ void i_8xy6(unsigned char x, unsigned char y)
 	unsigned char *vx = getVxReg(x);
 	unsigned char *vy = getVxReg(y);
 
-	printf("%x. vx & 1 = %x\n", *vx, 0x01 & *vx);
+	//printf("%x. vx & 1 = %x\n", *vx, 0x01 & *vx);
 	r_vf = 0x01 & *vx;
 #if QUIRK_SHIFT_RESULT_IN_VY
 	*vy = *vx >> 1;
@@ -128,13 +129,55 @@ void i_8xye(unsigned char x, unsigned char y)
 	unsigned char *vx = getVxReg(x);
 	unsigned char *vy = getVxReg(y);
 
-	// FIXME vf should be 1 or 0
 	if (0x80 & *vx)
 		r_vf = 0x01;
+	else
+		r_vf = 0x00;
 #if QUIRK_SHIFT_RESULT_IN_VY
 	*vy = *vx << 1;
 #else
 	*vx = *vx << 1;
 #endif
 }
+
+// Jump to address NNN
+void i_1nnn(unsigned short nnn)
+{
+	if (!validPC(nnn - 2))
+	{
+		printf("unsafe PC destination requested: %hx. ignoring instruction...\n", nnn - 2);
+		return;
+	}
+
+	r_pc = nnn;
+	r_pc -= 2; // account for the fact that loop() will increment pc by 2
+}
+
+// Jump to address NNN + V0
+void i_bnnn(unsigned short nnn)
+{
+	if (!validPC(nnn + r_v0 - 2))
+	{
+		printf("unsafe PC destination requested: %hx. ignoring instruction...\n", nnn + r_v0 - 2);
+		return;
+	}
+
+	r_pc = nnn + r_v0;
+	r_pc -= 2; // account for the fact that loop() will increment pc by 2
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

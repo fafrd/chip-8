@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h> 
 #include "state.h"
 
 // prints contents of mem to screen for debugging
@@ -21,6 +22,16 @@ void dumpRegs()
 	printf("dt:\t%hhx\tst:\t%hhx\t", r_dt, r_st);
 
 	printf("\n");
+}
+
+// ensure program counter register is a valid address
+bool validPC(unsigned short nnn)
+{
+	if (nnn > 0xffe)
+		return false; // outside 4k memory
+	if (nnn & 1)
+		return false; // misalignment
+	return true;
 }
 
 unsigned char* getVxReg(unsigned char x)
