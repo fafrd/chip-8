@@ -33,7 +33,7 @@ void loop()
 		current_lower = mem[r_pc+1];
 		current = (((short)current_upper) << 8) | current_lower;
 
-		printf("pc: %hx, instruction: %hx\n", r_pc, current);
+		printf("pc: %03hx, instruction: %04hx\n", r_pc, current);
 
 		// switch on first nibble (4 bits)
 		switch (current_upper >> 4)
@@ -50,7 +50,8 @@ void loop()
 				}
 				else if (current == 0x00ee)
 				{
-					// TODO 00ee - return from subroutine
+					// 00ee - return from subroutine
+					i_00ee();
 				}
 
 				break;
@@ -68,7 +69,8 @@ void loop()
 			{
 				// callDest is bottom 12 bits
 				unsigned short callDest = current & 0x0fff;
-				// TODO 2nnn - set pc to callDest and increment sp
+				// 2nnn - set pc to callDest and increment sp
+				i_2nnn(callDest);
 
 				break;
 			}

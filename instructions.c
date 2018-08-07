@@ -145,8 +145,8 @@ void i_1nnn(unsigned short nnn)
 {
 	if (!validPC(nnn - 2))
 	{
-		printf("unsafe PC destination requested: %hx. ignoring instruction...\n", nnn - 2);
-		return;
+		printf("unsafe PC destination requested: %hx. cannot continue.\n", nnn - 2);
+		exit(1);
 	}
 
 	r_pc = nnn;
@@ -158,24 +158,45 @@ void i_bnnn(unsigned short nnn)
 {
 	if (!validPC(nnn + r_v0 - 2))
 	{
-		printf("unsafe PC destination requested: %hx. ignoring instruction...\n", nnn + r_v0 - 2);
-		return;
+		printf("unsafe PC destination requested: %hx. cannot continue.\n", nnn + r_v0 - 2);
+		exit(1);
 	}
 
 	r_pc = nnn + r_v0;
 	r_pc -= 2; // account for the fact that loop() will increment pc by 2
 }
 
+// Execute subroutine starting at address NNN
+void i_2nnn(unsigned short nnn)
+{
+	printf("r_sp: %x, stack[r_sp]: %x, nnn: %x\n", r_sp, stack[r_sp], nnn);
 
+	// prevent stack overflow
+	if (r_sp >= STACK_SIZE)
+	{
+		printf("reached maximum stack size of %u. cannot continue.\n", STACK_SIZE);
+		exit(1);
+	}
 
+	// increment stack pointer, push current location to the stack
+	r_sp++;
+	stack[r_sp] = r_pc;
 
+	// set pc to new location nnn
+	i_1nnn(nnn);
+}
 
-
-
-
-
-
-
+// Return from a subroutine
+void i_00ee()
+{
+	printf("r_sp: %x, stack[r_sp]: %x\n", r_sp, stack[r_sp]);
+	// pop the stack into pc, decrement stack pointer
+	if (r_sp > 0)
+	{
+		r_pc = stack[r_sp];
+		r_sp--;
+	}
+}
 
 
 

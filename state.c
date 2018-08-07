@@ -31,7 +31,7 @@ unsigned char r_st;
 void initializeState()
 {
 	mem = malloc(4096);
-	stack = malloc(16);
+	stack = malloc(STACK_SIZE);
 
 	r_i = 0;
 	r_v0 = 0;

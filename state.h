@@ -1,6 +1,8 @@
 #ifndef STATE_H
 #define STATE_H
 
+#define STACK_SIZE 16
+
 void initializeState();
 
 // main memory
