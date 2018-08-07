@@ -81,7 +81,8 @@ void loop()
 				// compare register with the last byte
 				unsigned char byteToCompare = current_lower;
 
-				// TODO 3xnn - if targetReg == byteToCompare, increment pc by 2
+				// 3xnn - if targetReg == byteToCompare, increment pc by 2
+				i_3xnn(targetReg, byteToCompare);
 
 				break;
 			}
@@ -92,7 +93,8 @@ void loop()
 				// compare register with the last byte
 				unsigned char byteToCompare = current_lower;
 
-				// TODO 4xnn - if targetReg != byteToCompare, increment pc by 2
+				// 4xnn - if targetReg != byteToCompare, increment pc by 2
+				i_4xnn(targetReg, byteToCompare);
 
 				break;
 			}
@@ -103,7 +105,8 @@ void loop()
 				// target register y is third nibble
 				unsigned char targetRegY = current_lower >> 4;
 
-				// TODO 5xy0 - if targetRegX == targetRegY, increment pc by 2
+				// 5xy0 - if targetRegX == targetRegY, increment pc by 2
+				i_5xy0(targetRegX, targetRegY);
 
 				break;
 			}
@@ -210,7 +213,8 @@ void loop()
 				// target register y is third nibble
 				unsigned char targetRegY = current_lower >> 4;
 
-				// TODO 9xyn- if targetRegX != targetRegY, increment pc by 2
+				// 9xy0- if targetRegX != targetRegY, increment pc by 2
+				i_9xy0(targetRegX, targetRegY);
 
 				break;
 			}

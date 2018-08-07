@@ -189,13 +189,51 @@ void i_2nnn(unsigned short nnn)
 // Return from a subroutine
 void i_00ee()
 {
-	printf("r_sp: %x, stack[r_sp]: %x\n", r_sp, stack[r_sp]);
+	//printf("r_sp: %x, stack[r_sp]: %x\n", r_sp, stack[r_sp]);
 	// pop the stack into pc, decrement stack pointer
 	if (r_sp > 0)
 	{
 		r_pc = stack[r_sp];
 		r_sp--;
 	}
+}
+
+// Skip the following instruction if the value of register VX equals NN
+void i_3xnn(unsigned char x, unsigned char nn)
+{
+	unsigned char *vx = getVxReg(x);
+
+	if (*vx == nn)
+		r_pc += 2;
+}
+
+// Skip the following instruction if the value of register VX is equal to the value of register VY
+void i_5xy0(unsigned char x, unsigned char y)
+{
+	unsigned char *vx = getVxReg(x);
+	unsigned char *vy = getVxReg(y);
+
+	if (*vx == *vy)
+		r_pc += 2;
+}
+
+// Skip the following instruction if the value of register VX is not equal to NN
+void i_4xnn(unsigned char x, unsigned char nn)
+{
+	unsigned char *vx = getVxReg(x);
+
+	if (*vx != nn)
+		r_pc += 2;
+}
+
+// Skip the following instruction if the value of register VX is not equal to the value of register VY
+void i_9xy0(unsigned char x, unsigned char y)
+{
+	unsigned char *vx = getVxReg(x);
+	unsigned char *vy = getVxReg(y);
+
+	if (*vx != *vy)
+		r_pc += 2;
 }
 
 
