@@ -236,6 +236,18 @@ void i_9xy0(unsigned char x, unsigned char y)
 		r_pc += 2;
 }
 
+// Store memory address NNN in register I
+void i_annn(unsigned short nnn)
+{
+	r_i = nnn;
+}
+
+// Add the value stored in register VX to register I
+void i_fx1e(unsigned char x)
+{
+	unsigned char *vx = getVxReg(x);
+	r_i += *vx;
+}
 
 
 

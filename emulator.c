@@ -223,7 +223,8 @@ void loop()
 				// newValue is bottom 12 bits
 				unsigned short newValue = current & 0x0fff;
 
-				// TODO annn - set register I to newValue
+				// annn - set register I to newValue
+				i_annn(newValue);
 
 				break;
 			}
@@ -317,7 +318,8 @@ void loop()
 					}
 					case 0x1e:
 					{
-						// TODO fx1e - register i = register i + targetRegX
+						// fx1e - register i = register i + targetRegX
+						i_fx1e(targetRegX);
 
 						break;
 					}
