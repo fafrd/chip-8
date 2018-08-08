@@ -7,9 +7,10 @@ done
 - implement subroutine handling, 2nnn 00ee
 - implement branching, 3xnn 5xy0 4xnn 9xy0
 - implement i-register instructions, annn fx1e
+- implement memory store/load instructions, fx55 fx65
 
 todo
-- implement memory store/load instructions, fx55 fx65
+disassembler !!!
 
 backlog
 - implement random, cxnn

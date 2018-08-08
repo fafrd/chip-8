@@ -371,11 +371,16 @@ void loop()
 	}
 }
 
+void printUsage()
+{
+	printf("usage: emulator [run|disassemble] file.rom\n");
+}
+
 int main(int argc, char *argv[])
 {
-	if (argc < 2)
+	if (argc < 3)
 	{
-		printf("%s", "usage: emulator file.rom\n");
+		printUsage();
 		return -1;
 	}
 
@@ -385,7 +390,7 @@ int main(int argc, char *argv[])
 	// read romfile into buffer
 	unsigned char *buffer;
 	size_t length;
-	readFile(argv[1], &buffer, &length);
+	readFile(argv[2], &buffer, &length);
 
 	int loadSuccess = loadRomToMemory(&buffer, length);
 	if (loadSuccess != 0)
@@ -394,19 +399,30 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	// start main program processing loop
-	loop();
+	int retval = 0;
+	if (argv[1][0] == 'r')
+	{
+		// start main program processing loop
+		loop();
 
-	printf("execution complete. register dump:\n");
-	dumpRegs();
-	printf("press y to dump memory: ");
-	char yn = getchar();
-	printf("\n");
-	if (yn == 'y')
-		dumpMem();
-
-	//printBytes(buffer, length);
+		printf("execution complete. register dump:\n");
+		dumpRegs();
+		printf("press y to dump memory: ");
+		char yn = getchar();
+		printf("\n");
+		if (yn == 'y')
+			dumpMem();
+	}
+	else if (argv[1][0] == 'd')
+	{
+		disassemble(length);
+	}
+	else
+	{
+		printUsage();
+		retval = -1;
+	}
 
 	free(buffer);
-	return 0;
+	return retval;
 }
