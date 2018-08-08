@@ -3,6 +3,7 @@
 
 void i_6xnn(unsigned char, unsigned char);
 void i_8xy0(unsigned char, unsigned char);
+void i_fx55(unsigned char);
 void i_fx65(unsigned char);
 void i_8xy4(unsigned char, unsigned char);
 void i_8xy5(unsigned char, unsigned char);
@@ -34,6 +35,5 @@ void i_00e0();
 void i_fx29(unsigned char);
 void i_dxyn(unsigned char, unsigned char, unsigned char);
 void i_fx33(unsigned char);
-
 
 #endif

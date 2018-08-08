@@ -5,7 +5,17 @@
 // prints contents of mem to screen for debugging
 void dumpMem()
 {
-	// TODO
+	for (int i = 0; i < 0x100; i++)
+	{
+		printf("%04hx\t", i*0x10);
+		for (int j = 0; j < 0x10; j++)
+		{
+			printf("%02hhx ", mem[i*0x10 + j]);
+			if (j == 0x7)
+				printf(" ");
+		}
+		printf("\n");
+	}
 
 	printf("\n");
 }

@@ -339,15 +339,17 @@ void loop()
 					}
 					case 0x55:
 					{
-						// TODO fx55 - store registers v0 through targetRegX in memory
+						// fx55 - store registers v0 through targetRegX in memory
 						// starting at location i
+						i_fx55(targetRegX);
 
 						break;
 					}
 					case 0x65:
 					{
-						// TODO fx65 - read registers v0 through targetRegX from memory
+						// fx65 - read registers v0 through targetRegX from memory
 						// starting at location i
+						i_fx65(targetRegX);
 
 						break;
 					}
@@ -397,6 +399,11 @@ int main(int argc, char *argv[])
 
 	printf("execution complete. register dump:\n");
 	dumpRegs();
+	printf("press y to dump memory: ");
+	char yn = getchar();
+	printf("\n");
+	if (yn == 'y')
+		dumpMem();
 
 	//printBytes(buffer, length);
 
