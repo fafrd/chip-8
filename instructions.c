@@ -300,7 +300,45 @@ void i_fx55(unsigned char x)
 // I is set to I + X + 1 after operation
 void i_fx65(unsigned char x)
 {
+	// opposite of fx55. fill registers with memory
+	switch (x)
+	{
+		case 0xf:
+			*getVxReg(0xf) = mem[r_i + 0xf];
+		case 0xe:
+			*getVxReg(0xe) = mem[r_i + 0xe];
+		case 0xd:
+			*getVxReg(0xd) = mem[r_i + 0xd];
+		case 0xc:
+			*getVxReg(0xc) = mem[r_i + 0xc];
+		case 0xb:
+			*getVxReg(0xb) = mem[r_i + 0xb];
+		case 0xa:
+			*getVxReg(0xa) = mem[r_i + 0xa];
+		case 0x9:
+			*getVxReg(0x9) = mem[r_i + 0x9];
+		case 0x8:
+			*getVxReg(0x8) = mem[r_i + 0x8];
+		case 0x7:
+			*getVxReg(0x7) = mem[r_i + 0x7];
+		case 0x6:
+			*getVxReg(0x6) = mem[r_i + 0x6];
+		case 0x5:
+			*getVxReg(0x5) = mem[r_i + 0x5];
+		case 0x4:
+			*getVxReg(0x4) = mem[r_i + 0x4];
+		case 0x3:
+			*getVxReg(0x3) = mem[r_i + 0x3];
+		case 0x2:
+			*getVxReg(0x2) = mem[r_i + 0x2];
+		case 0x1:
+			*getVxReg(0x1) = mem[r_i + 0x1];
+		case 0x0:
+			*getVxReg(0x0) = mem[r_i + 0x0];
+	}
 
+	unsigned char *vx = getVxReg(x);
+	r_i += *vx + 1;
 }
 
 
