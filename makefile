@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-I. -g -Wsign-conversion
+CFLAGS=-I. -g -Wsign-conversion -pthread
 DEPS = util.h disassembler.h state.h instructions.h 
 OBJ = util.o emulator.o disassembler.o state.o instructions.o
 

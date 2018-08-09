@@ -4,6 +4,7 @@
 #define STACK_SIZE 16
 
 void initializeState();
+void* updateTimers(void*);
 
 // main memory
 extern unsigned char* mem;

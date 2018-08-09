@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
 #include "state.h"
 
 unsigned char *mem;
@@ -27,6 +29,20 @@ unsigned short r_pc;
 unsigned char r_sp;
 unsigned char r_dt;
 unsigned char r_st;
+
+void* updateTimers(void* arg)
+{
+	useconds_t sixtyHzDelay = 16667;
+	while (1)
+	{
+		//printf("timer sleep...\n");
+		usleep(sixtyHzDelay);
+		if (r_dt > 0)
+			r_dt--;
+		if (r_st > 0)
+			r_st--;
+	}
+}
 	
 void initializeState()
 {
@@ -59,4 +75,16 @@ void initializeState()
 	r_sp = 0;
 	r_dt = 0;
 	r_st = 0;
+
+	// create thread for delay/sound timers
+	pthread_t timerThread;
+	if (pthread_create(&timerThread, NULL, updateTimers, NULL))
+	{
+		fprintf(stderr, "Error creating timer thread\n");
+	}
+
+	if (pthread_detach(timerThread))
+	{
+		fprintf(stderr, "Error detaching timer thread\n");
+	}
 }
