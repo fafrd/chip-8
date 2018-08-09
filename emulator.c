@@ -7,14 +7,16 @@
 #include "instructions.h"
 #include "util.h"
 
+bool debug = false;
+
 // copies buffer to mem starting at mem[0x200]
 // returns 0 on success
-int loadRomToMemory(unsigned char **buffer, size_t length)
+bool loadRomToMemory(unsigned char **buffer, size_t length)
 {
 	if (length > 0xc8f)
-		return 1; // rom too big
+		return false; // rom too big
 	memcpy((mem + 0x200), *buffer, length);
-	return 0;
+	return true;
 }
 
 // main instruction processing loop
@@ -33,7 +35,8 @@ void loop()
 		current_lower = mem[r_pc+1];
 		current = (((short)current_upper) << 8) | current_lower;
 
-		printf("pc: %03hx, instruction: %04hx\n", r_pc, current);
+		if (debug)
+			printf("pc: %03hx, instruction: %04hx\n", r_pc, current);
 
 		// switch on first nibble (4 bits)
 		switch (current_upper >> 4)
@@ -365,7 +368,8 @@ void loop()
 		// if pc > 0xfff, exit program
 		if (!validPC(r_pc))
 		{
-			printf("PC is %hx; exiting...\n", r_pc);
+			if (debug)
+				printf("PC is %hx; exiting...\n", r_pc);
 			return;
 		}
 	}
@@ -373,15 +377,46 @@ void loop()
 
 void printUsage()
 {
-	printf("usage: emulator [run|disassemble] file.rom\n");
+	printf("usage: emulator [run|disassemble] file.rom [flags]\n");
+	printf("flags:\n");
+	printf("\t--debug\tprints debug messages to log\n");
+	printf("\t--dump\tprints content of memory to log when execution is complete\n");
 }
 
 int main(int argc, char *argv[])
 {
+	bool memoryDump = false;
+	char* command;
+	char* filename;
 	if (argc < 3)
 	{
 		printUsage();
 		return -1;
+	}
+	
+	command = argv[1];
+	filename = argv[2];
+
+	for (int i = 3; i < argc; i++)
+	{
+		if (strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-h") == 0)
+		{
+			printUsage();
+			return 1;
+		}
+		else if (strcmp(argv[i], "--debug") == 0)
+		{
+			debug = true;
+		}
+		else if (strcmp(argv[i], "--dump") == 0)
+		{
+			memoryDump = true;
+		}
+		else
+		{
+			printUsage();
+			return 1;
+		}
 	}
 
 	// Initialize registers, memory
@@ -390,30 +425,32 @@ int main(int argc, char *argv[])
 	// read romfile into buffer
 	unsigned char *buffer;
 	size_t length;
-	readFile(argv[2], &buffer, &length);
+	readFile(filename, &buffer, &length);
 
-	int loadSuccess = loadRomToMemory(&buffer, length);
-	if (loadSuccess != 0)
+	bool loadSuccess = loadRomToMemory(&buffer, length);
+	if (!loadSuccess)
 	{
 		printf("%s", "error: ROM size greater than 0xc8f bytes\n");
 		return 1;
 	}
 
 	int retval = 0;
-	if (argv[1][0] == 'r')
+	if (command[0] == 'r')
 	{
 		// start main program processing loop
 		loop();
 
-		printf("execution complete. register dump:\n");
-		dumpRegs();
-		printf("press y to dump memory: ");
-		char yn = getchar();
-		printf("\n");
-		if (yn == 'y')
+		if (debug)
+		{
+			printf("execution complete. register dump:\n");
+			dumpRegs();
+		}
+		if (memoryDump)
+		{
 			dumpMem();
+		}
 	}
-	else if (argv[1][0] == 'd')
+	else if (command[0] == 'd')
 	{
 		disassemble(length);
 	}

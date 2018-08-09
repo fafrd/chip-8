@@ -8,18 +8,19 @@ done
 - implement branching, 3xnn 5xy0 4xnn 9xy0
 - implement i-register instructions, annn fx1e
 - implement memory store/load instructions, fx55 fx65
+- disassembler
 
 todo
-disassembler !!!
-
-backlog
 - implement random, cxnn
 - set delay timer to auto-decrement each loop
 - implement delay timer, fx15 fx07
 - set audio timer to auto-decrement each loop
 - implement sound timer, fx18
+- implement debug flag to enable/disable reg/mem dump
 - implement keypad input mechanism. (at the top of loop, check if key is pressed?)
 - implement keypad instructions, fx0a ex9e exa1
+
+backlog
 - create graphics area (64x32). chip does not specify what this should look like in memory. i'll probably just do a 256byte array, where each pixel = 1 bit
 - implement clear screen instruction, 00e0
 - load default hex sprites to memory 0x000-0x200
