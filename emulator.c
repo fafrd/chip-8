@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h> 
+#include <unistd.h>
 #include "disassembler.h"
 #include "state.h"
 #include "instructions.h"
@@ -27,8 +28,13 @@ void loop()
 	unsigned char current_upper, current_lower;
 	unsigned short current;
 
+	useconds_t delayTime = 10000; // 10 ms
+
 	while (1)
 	{
+		// delay between each instruction
+		usleep(delayTime);
+
 		// set current instruction...
 		// instructions are 2 bytes, get upper+lower byte, combine
 		current_upper = mem[r_pc];
