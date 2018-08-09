@@ -302,8 +302,8 @@ void loop()
 				{
 					case 0x07:
 					{
-						// TODO fx07 - targetRegX = register DT
-
+						// fx07 - targetRegX = register DT
+						i_fx07(targetRegX);
 						break;
 					}
 					case 0x0a:
@@ -315,21 +315,20 @@ void loop()
 					}
 					case 0x15:
 					{
-						// TODO fx15 - register DT = targetRegX
-
+						// fx15 - register DT = targetRegX
+						i_fx15(targetRegX);
 						break;
 					}
 					case 0x18:
 					{
-						// TODO fx18 - register ST = targetRegX
-
+						// fx18 - register ST = targetRegX
+						i_fx18(targetRegX);
 						break;
 					}
 					case 0x1e:
 					{
 						// fx1e - register i = register i + targetRegX
 						i_fx1e(targetRegX);
-
 						break;
 					}
 					case 0x29:

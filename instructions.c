@@ -341,5 +341,26 @@ void i_fx65(unsigned char x)
 	r_i += *vx + 1;
 }
 
+// Set the delay timer to the value of register VX
+void i_fx15(unsigned char x)
+{
+	unsigned char *vx = getVxReg(x);
+	r_dt = *vx;
+}
+
+// Store the current value of the delay timer in register VX
+void i_fx07(unsigned char x)
+{
+	unsigned char *vx = getVxReg(x);
+	*vx = r_dt;
+}
+
+// Set the sound timer to the value of register VX
+void i_fx18(unsigned char x)
+{
+	unsigned char *vx = getVxReg(x);
+	r_st = *vx;
+}
+
 
 
