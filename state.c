@@ -87,4 +87,7 @@ void initializeState()
 	{
 		fprintf(stderr, "Error detaching timer thread\n");
 	}
+
+	// make rand() random
+	srand(time(NULL));
 }

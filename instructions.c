@@ -362,5 +362,15 @@ void i_fx18(unsigned char x)
 	r_st = *vx;
 }
 
+// Set VX to a random number with a mask of NN
+void i_cxnn(unsigned char x, unsigned char nn)
+{
+	unsigned char *vx = getVxReg(x);
+	*vx = rand() % 0xff;
+	*vx &= nn;
+}
+
+
+
 
 

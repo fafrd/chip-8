@@ -252,8 +252,9 @@ void loop()
 				// target register x is second nibble
 				unsigned char targetRegX = current_upper & 0x0f;
 
-				// TODO cxnn - generate a random byte, then mask it
+				// cxnn - generate a random byte, then mask it
 				// targetRegisterX = current_lower & (random byte)
+				i_cxnn(targetRegX, current_lower);
 
 				break;
 			}
