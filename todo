@@ -18,9 +18,9 @@ done
 - load default hex sprites to memory 0x000-0x200
 - implement i-reg sprite instruction, fx29
 - implement binary-coded decimal fx33
+- implement keypad input mechanism
 
 todo
-- implement keypad input mechanism. (at the top of loop, check if key is pressed?)
 - implement keypad instructions, fx0a ex9e exa1
 
 backlog

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h> 
+#include <ncurses.h>
 #include "state.h"
 
 // prints contents of mem to screen for debugging
@@ -32,6 +33,28 @@ void dumpRegs()
 	printf("dt:\t%hhx\tst:\t%hhx\t", r_dt, r_st);
 
 	printf("\n");
+}
+
+void dumpKeyState()
+{
+	printw("1 2 3 C: %d %d %d %d\n", key1, key2, key3, keyC);
+	printw("4 5 6 D: %d %d %d %d\n", key4, key5, key6, keyD);
+	printw("7 8 9 E: %d %d %d %d\n", key7, key8, key9, keyE);
+	printw("A 0 B F: %d %d %d %d\n", keyA, key0, keyB, keyF);
+}
+
+bool kbhit(WINDOW* win)
+{
+	int ch = wgetch(win);
+	if (ch != ERR)
+	{
+		ungetch(ch);
+		return true;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 // ensure program counter register is a valid address

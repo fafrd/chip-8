@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h> 
 #include <unistd.h>
+#include <ncurses.h>
 #include "disassembler.h"
 #include "state.h"
 #include "instructions.h"
@@ -23,6 +24,23 @@ bool loadRomToMemory(unsigned char **buffer, size_t length)
 // main instruction processing loop
 void loop()
 {
+	initscr(); // start curses mode
+
+    cbreak(); // allow ctrl c, ctrl z to work
+    noecho(); // don't echo what the user types
+	curs_set(0); // cursor is invisible
+
+	// create main window for CHIP-8 display
+	WINDOW* drawWin = createDrawWindow();
+
+    nodelay(drawWin, TRUE); // sets getch() to be a non-blocking call
+
+    //scrollok(stdscr, TRUE); // temporary: don't think this is necessary
+
+	mvwprintw(drawWin, 4, 10, "CHIP-8 INTERPRETER");
+	mvwprintw(drawWin, 5, 14, "by kian");
+	wrefresh(drawWin);
+
 	// program starts at 0x200
 	r_pc = 0x200;
 	unsigned char current_upper, current_lower;
@@ -30,10 +48,19 @@ void loop()
 
 	useconds_t delayTime = 10000; // 10 ms
 
+	sleep(3);
+/*
 	while (1)
 	{
 		// delay between each instruction
 		usleep(delayTime);
+
+		// update key pressed state
+		if (kbhit(drawWin))
+		{
+			unsigned char keyHit = mapKey(wgetch(drawWin));
+			updateKeyState(keyHit);
+		}
 
 		// set current instruction...
 		// instructions are 2 bytes, get upper+lower byte, combine
@@ -43,7 +70,7 @@ void loop()
 
 		if (debug)
 			printf("pc: %03hx, instruction: %04hx\n", r_pc, current);
-
+		
 		// switch on first nibble (4 bits)
 		switch (current_upper >> 4)
 		{
@@ -283,13 +310,15 @@ void loop()
 
 				if (current_lower == 0x9e)
 				{
-					// TODO ex9e - if key corresponding to the value of targetRegX is
+					// ex9e - if key corresponding to the value of targetRegX is
 					// currently pressed, increment pc by 2
+					i_ex9e(targetRegX);
 				}
 				else if (current_lower == 0xa1)
 				{
 					// TODO exa1 - if key corresponding to the value of targetRegX is
 					// currently not pressed, increment pc by 2
+					i_exa1(targetRegX);
 				}
 
 				break;
@@ -309,9 +338,9 @@ void loop()
 					}
 					case 0x0a:
 					{
-						// TODO fx0a - halt execution until any key is pressed, then
+						// fx0a - halt execution until any key is pressed, then
 						// store the value of that key in targetRegisterX
-
+						i_fx0a(targetRegX);
 						break;
 					}
 					case 0x15:
@@ -379,6 +408,7 @@ void loop()
 			return;
 		}
 	}
+	*/
 }
 
 void printUsage()
@@ -448,7 +478,7 @@ int main(int argc, char *argv[])
 
 		if (debug)
 		{
-			printf("execution complete. register dump:\n");
+			printf("register dump:\n");
 			dumpRegs();
 		}
 		if (memoryDump)
@@ -467,5 +497,7 @@ int main(int argc, char *argv[])
 	}
 
 	free(buffer);
+	endwin(); // exit ncurses mode
+	printf("Execution complete.\n");
 	return retval;
 }

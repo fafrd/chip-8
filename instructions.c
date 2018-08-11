@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <ncurses.h>
 #include "instructions.h"
 #include "state.h"
 #include "util.h"
@@ -169,7 +170,7 @@ void i_bnnn(unsigned short nnn)
 // Execute subroutine starting at address NNN
 void i_2nnn(unsigned short nnn)
 {
-	printf("r_sp: %x, stack[r_sp]: %x, nnn: %x\n", r_sp, stack[r_sp], nnn);
+	//printf("r_sp: %x, stack[r_sp]: %x, nnn: %x\n", r_sp, stack[r_sp], nnn);
 
 	// prevent stack overflow
 	if (r_sp >= STACK_SIZE)
@@ -436,12 +437,37 @@ void i_fx33(unsigned char x)
 	unsigned char tens = (*vx / 10) % 10;
 	unsigned char hundreds = (*vx / 100) % 10;
 
-	printf("r_i: %x, ones: %x, tens: %x, hundreds: %x\n", r_i, ones, tens, hundreds);
+	//printf("r_i: %x, ones: %x, tens: %x, hundreds: %x\n", r_i, ones, tens, hundreds);
 
 	mem[r_i] = hundreds;
 	mem[r_i + 1] = tens;
 	mem[r_i + 2] = ones;
 }
 
+// Wait for a keypress and store the result in register VX
+void i_fx0a(unsigned char x)
+{
+	unsigned char *vx = getVxReg(x);
+
+	*vx = mapKey(getch());
+}
+
+// Skip the following instruction if the key corresponding to the hex value currently stored in register VX is pressed
+void i_ex9e(unsigned char x)
+{
+	unsigned char *vx = getVxReg(x);
+
+	if (getStateForKey(*vx))
+		r_pc += 2;
+}
+
+// Skip the following instruction if the key corresponding to the hex value currently stored in register VX is not pressed
+void i_exa1(unsigned char x)
+{
+	unsigned char *vx = getVxReg(x);
+
+	if (!getStateForKey(*vx))
+		r_pc += 2;
+}
 
 
