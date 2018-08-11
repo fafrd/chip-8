@@ -10,6 +10,7 @@
 
 unsigned char *mem;
 unsigned short *stack;
+bool *screen;
 
 unsigned short r_i;
 unsigned char r_v0;
@@ -254,10 +255,16 @@ void clearAllKeyStates()
 	keyF = false;
 }
 
+void clearScreen()
+{
+	memset(screen, 0, sizeof(bool) * 2048);
+}
+
 void initializeState()
 {
-	mem = malloc(4096);
-	stack = malloc(STACK_SIZE);
+	mem = calloc(4096, sizeof(unsigned char));
+	stack = calloc(STACK_SIZE, sizeof(unsigned short));
+	screen = calloc(2048, sizeof(bool));
 
 	r_i = 0;
 	r_v0 = 0;

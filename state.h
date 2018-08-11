@@ -13,12 +13,16 @@ void updateKeyState(unsigned char);
 void clearAllKeyStates();
 bool getStateForKey(unsigned char);
 WINDOW* createDrawWindow();
+void clearScreen();
 
 // main memory
 extern unsigned char* mem;
 
 // ye olde stack
 extern unsigned short* stack;
+
+// the screen is an array of boolean values
+bool* screen;
 
 // general purpose registers
 extern unsigned short r_i;
