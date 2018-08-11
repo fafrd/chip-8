@@ -14,17 +14,17 @@ done
 - set audio timer to auto-decrement each loop
 - implement delay timer, fx15 fx07
 - implement sound timer, fx18
+- implement random, cxnn
+- load default hex sprites to memory 0x000-0x200
+- implement i-reg sprite instruction, fx29
 
 todo
-- implement random, cxnn
+- implement binary-coded decimal fx33
 - implement keypad input mechanism. (at the top of loop, check if key is pressed?)
 - implement keypad instructions, fx0a ex9e exa1
 
 backlog
 - create graphics area (64x32). chip does not specify what this should look like in memory. i'll probably just do a 256byte array, where each pixel = 1 bit
 - implement clear screen instruction, 00e0
-- load default hex sprites to memory 0x000-0x200
-- implement i-reg sprite instruction, fx29
 - implement sprite draw instruction, dxyn
 - create graphics draw code. (each loop, read graphics array to screen. how will i do that?)
-- implement binary-coded decimal fx33

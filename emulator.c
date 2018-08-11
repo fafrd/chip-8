@@ -334,9 +334,9 @@ void loop()
 					}
 					case 0x29:
 					{
-						// TODO fx29 - register i = location of sprite specified by targetRegX
+						// fx29 - register i = location of sprite specified by targetRegX
 						// (not fully sure what this means yet)
-
+						i_fx29(targetRegX);
 						break;
 					}
 					case 0x33:

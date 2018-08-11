@@ -370,6 +370,62 @@ void i_cxnn(unsigned char x, unsigned char nn)
 	*vx &= nn;
 }
 
+// Set I to the memory address of the sprite data corresponding to the hexadecimal digit stored in register VX
+void i_fx29(unsigned char x)
+{
+	switch (x)
+	{
+		case 0x0:
+			r_i = 0x00;
+			break;
+		case 0x1:
+			r_i = 0x0a;
+			break;
+		case 0x2:
+			r_i = 0x14;
+			break;
+		case 0x3:
+			r_i = 0x1e;
+			break;
+		case 0x4:
+			r_i = 0x28;
+			break;
+		case 0x5:
+			r_i = 0x32;
+			break;
+		case 0x6:
+			r_i = 0x3c;
+			break;
+		case 0x7:
+			r_i = 0x46;
+			break;
+		case 0x8:
+			r_i = 0x50;
+			break;
+		case 0x9:
+			r_i = 0x5a;
+			break;
+		case 0xa:
+			r_i = 0x64;
+			break;
+		case 0xb:
+			r_i = 0x6e;
+			break;
+		case 0xc:
+			r_i = 0x78;
+			break;
+		case 0xd:
+			r_i = 0x82;
+			break;
+		case 0xe:
+			r_i = 0x8c;
+			break;
+		case 0xf:
+			r_i = 0x96;
+			break;
+	}
+}
+
 
 
 
