@@ -373,7 +373,8 @@ void i_cxnn(unsigned char x, unsigned char nn)
 // Set I to the memory address of the sprite data corresponding to the hexadecimal digit stored in register VX
 void i_fx29(unsigned char x)
 {
-	switch (x)
+	unsigned char *vx = getVxReg(x);
+	switch (*vx)
 	{
 		case 0x0:
 			r_i = 0x00;
@@ -426,7 +427,21 @@ void i_fx29(unsigned char x)
 	}
 }
 
+// Store the binary-coded decimal equivalent of the value stored in register VX at addresses I, I+1, and I+2
+void i_fx33(unsigned char x)
+{
+	unsigned char *vx = getVxReg(x);
+	//printf("x: %x\n", x);
+	unsigned char ones = *vx % 10;
+	unsigned char tens = (*vx / 10) % 10;
+	unsigned char hundreds = (*vx / 100) % 10;
 
+	printf("r_i: %x, ones: %x, tens: %x, hundreds: %x\n", r_i, ones, tens, hundreds);
+
+	mem[r_i] = hundreds;
+	mem[r_i + 1] = tens;
+	mem[r_i + 2] = ones;
+}
 
 
 

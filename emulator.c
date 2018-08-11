@@ -341,9 +341,9 @@ void loop()
 					}
 					case 0x33:
 					{
-						// TODO fx33 - store binary coded decimal representation of
+						// fx33 - store binary coded decimal representation of
 						// targetRegX in memory locations i, i+1, i+2
-
+						i_fx33(targetRegX);
 						break;
 					}
 					case 0x55:
