@@ -478,4 +478,17 @@ void i_exa1(unsigned char x)
 		r_pc += 2;
 }
 
+// Clear the screen
+void i_00e0()
+{
+	clearScreen();
+}
 
+// Draw a sprite at position VX, VY with N bytes of sprite data starting at the address stored in I
+// Set VF to 01 if any set pixels are changed to unset, and 00 otherwise
+void i_dxyn(unsigned char x, unsigned char y, unsigned char n)
+{
+	unsigned char *vx = getVxReg(x);
+	unsigned char *vy = getVxReg(y);
+	
+}

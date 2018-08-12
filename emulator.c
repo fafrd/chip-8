@@ -32,10 +32,13 @@ void loop()
 
 	// create main window for CHIP-8 display
 	WINDOW* drawWin = createDrawWindow();
-
     nodelay(drawWin, TRUE); // sets getch() to be a non-blocking call
 
-    //scrollok(stdscr, TRUE); // temporary: don't think this is necessary
+	// create secondary window for messages
+	WINDOW* messageWin = createMessageWindow();
+    nodelay(messageWin, TRUE); // sets getch() to be a non-blocking call
+
+    scrollok(messageWin, TRUE);
 
 	mvwprintw(drawWin, 4, 10, "CHIP-8 INTERPRETER");
 	mvwprintw(drawWin, 5, 14, "by kian");
@@ -56,12 +59,15 @@ void loop()
 	wrefresh(drawWin);
 	usleep(300000);
 
+	wprintw(messageWin, "Starting interpreter.\n");
+	wrefresh(messageWin);
+
 	// program starts at 0x200
 	r_pc = 0x200;
 	unsigned char current_upper, current_lower;
 	unsigned short current;
 
-	useconds_t delayTime = 10000; // 10 ms
+	useconds_t delayTime = 300000; // 300 ms
 
 	// *** delete from here
 	for (int i = 0; i < 2048; i++)
@@ -70,18 +76,19 @@ void loop()
 	}
 	// **** to here
 
-	delwin(drawWin);
-	drawWin = createDrawWindow();
-
 	while (1)
 	{
+		// draw previous loop output
+		delwin(drawWin);
+		drawWin = createDrawWindow();
+
 		// delay between each instruction
 		usleep(delayTime);
 
 		// update key pressed state
-		if (kbhit(drawWin))
+		if (kbhit(messageWin))
 		{
-			unsigned char keyHit = mapKey(wgetch(drawWin));
+			unsigned char keyHit = mapKey(wgetch(messageWin));
 			updateKeyState(keyHit);
 		}
 
@@ -91,9 +98,9 @@ void loop()
 		current_lower = mem[r_pc+1];
 		current = (((short)current_upper) << 8) | current_lower;
 
-		if (debug)
-			printf("pc: %03hx, instruction: %04hx\n", r_pc, current);
-		
+		wprintw(messageWin, "pc: %03hx, instruction: %04hx\n", r_pc, current);
+		wrefresh(messageWin);
+
 		// switch on first nibble (4 bits)
 		switch (current_upper >> 4)
 		{
@@ -105,7 +112,8 @@ void loop()
 
 				if (current == 0x00e0)
 				{
-					// TODO 00e0 - clear screen
+					// 00e0 - clear screen
+					i_00e0();
 				}
 				else if (current == 0x00ee)
 				{
@@ -318,12 +326,13 @@ void loop()
 				// n is last nibble
 				unsigned char n = current_lower & 0X0f;
 
-				// TODO 0xyn - read n bytes from memory, starting at memory location stored in 
+				// dxyn - read n bytes from memory, starting at memory location stored in 
 				// the I register, and draw them as sprites to screen at coordinates specified as
 				// (x, y) from targetRegX and targetRegY.
 				// sprites are XORed to the screen.
 				// if this causes any pixels to be erased, set register VF to 1, else 0.
 				// sprites positioned outside the display must wrap to the other side.
+				i_dxyn(targetRegX, targetRegY, n);
 
 				break;
 			}
@@ -427,13 +436,13 @@ void loop()
 		// if pc > 0xfff, exit program
 		if (!validPC(r_pc))
 		{
-			if (debug)
-				printf("PC is %hx; exiting...\n", r_pc);
+			wprintw(messageWin, "PC is %hx; exiting...\n", r_pc);
+			wrefresh(messageWin);
+
 			return;
 		}
 	}
 
-	delwin(drawWin);
 	endwin(); // exit ncurses mode
 }
 

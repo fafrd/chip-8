@@ -57,28 +57,36 @@ WINDOW* createDrawWindow()
 	WINDOW* win;
 
 	// draw window + border
-	int height = 32;
-	int width = 64;
-	win = newwin(height + 1, width + 1, (LINES - height) / 2, (COLS - width) / 2);
+	win = newwin(33, 65, (LINES - 32) / 2, (COLS - 96) / 2);
 	box(win, 0, 0);
 
-	// todo: try to get screen bool array into the mvwprintw
-
-	//char drawbuf[] = {'#', ' ', '#', '\0'};
-	char* drawbuf = malloc(width * height + 1);
-	for (int h = 0; h < height - 1; h++)
+	char* drawbuf = malloc(64 * 32 + 1);
+	for (int h = 0; h < 32 - 1; h++)
 	{
-		for (int w = 0; w < width - 1; w++)
+		for (int w = 0; w < 64 - 1; w++)
 		{
-			if (screen[w + h*width])
+			if (screen[w + h*64])
 				drawbuf[w] = '#';
 			else
 				drawbuf[w] = ' ';
 		}
 
-		drawbuf[width * height] = '\0';
+		drawbuf[64 * 32] = '\0';
 		mvwprintw(win, h + 1, 1, drawbuf);
 	}
+
+	wrefresh(win);
+	return win;
+}
+
+WINDOW* createMessageWindow()
+{
+	WINDOW* win;
+
+	// draw window
+	// nlines, ncols, begin_y, begin_x
+	win = newwin(31, 31, ((LINES - 32) / 2) + 1, ((COLS + 34) / 2) + 1);
+	//box(win, 0, 0);
 
 	wrefresh(win);
 	return win;

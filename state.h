@@ -13,6 +13,7 @@ void updateKeyState(unsigned char);
 void clearAllKeyStates();
 bool getStateForKey(unsigned char);
 WINDOW* createDrawWindow();
+WINDOW* createMessageWindow();
 void clearScreen();
 
 // main memory
