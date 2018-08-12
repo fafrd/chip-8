@@ -40,6 +40,21 @@ void loop()
 	mvwprintw(drawWin, 4, 10, "CHIP-8 INTERPRETER");
 	mvwprintw(drawWin, 5, 14, "by kian");
 	wrefresh(drawWin);
+	mvwprintw(drawWin, 6, 18, ".");
+	wrefresh(drawWin);
+	usleep(300000);
+	mvwprintw(drawWin, 6, 18, " .");
+	wrefresh(drawWin);
+	usleep(300000);
+	mvwprintw(drawWin, 6, 18, "  .");
+	wrefresh(drawWin);
+	usleep(300000);
+	mvwprintw(drawWin, 6, 18, "   .");
+	wrefresh(drawWin);
+	usleep(300000);
+	mvwprintw(drawWin, 6, 18, "    .");
+	wrefresh(drawWin);
+	usleep(300000);
 
 	// program starts at 0x200
 	r_pc = 0x200;
@@ -48,8 +63,16 @@ void loop()
 
 	useconds_t delayTime = 10000; // 10 ms
 
-	sleep(3);
-/*
+	// *** delete from here
+	for (int i = 0; i < 2048; i++)
+	{
+		screen[i] = i % 2;
+	}
+	// **** to here
+
+	delwin(drawWin);
+	drawWin = createDrawWindow();
+
 	while (1)
 	{
 		// delay between each instruction
@@ -160,7 +183,8 @@ void loop()
 				// target register is second nibble
 				unsigned char targetReg = current_upper & 0x0f;
 
-				// TODO 7xnn - targetReg = targetReg + current_lower
+				// 7xnn - targetReg = targetReg + current_lower
+				i_7xnn(targetReg, current_lower);
 				break;
 			}
 			case 0x8:
@@ -316,7 +340,7 @@ void loop()
 				}
 				else if (current_lower == 0xa1)
 				{
-					// TODO exa1 - if key corresponding to the value of targetRegX is
+					// exa1 - if key corresponding to the value of targetRegX is
 					// currently not pressed, increment pc by 2
 					i_exa1(targetRegX);
 				}
@@ -408,7 +432,9 @@ void loop()
 			return;
 		}
 	}
-	*/
+
+	delwin(drawWin);
+	endwin(); // exit ncurses mode
 }
 
 void printUsage()
@@ -497,7 +523,6 @@ int main(int argc, char *argv[])
 	}
 
 	free(buffer);
-	endwin(); // exit ncurses mode
 	printf("Execution complete.\n");
 	return retval;
 }

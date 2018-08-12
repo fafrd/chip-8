@@ -19,12 +19,10 @@ done
 - implement i-reg sprite instruction, fx29
 - implement binary-coded decimal fx33
 - implement keypad input mechanism
+- implement keypad instructions, fx0a ex9e exa1
+- create graphics area (64x32)
+- create graphics draw code. (each loop, read graphics array to screen)
 
 todo
-- implement keypad instructions, fx0a ex9e exa1
-
-backlog
-- create graphics area (64x32). chip does not specify what this should look like in memory. i'll probably just do a 256byte array, where each pixel = 1 bit
 - implement clear screen instruction, 00e0
 - implement sprite draw instruction, dxyn
-- create graphics draw code. (each loop, read graphics array to screen. how will i do that?)

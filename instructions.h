@@ -2,6 +2,7 @@
 #define INSTRUCTIONS_H
 
 void i_6xnn(unsigned char, unsigned char);
+void i_7xnn(unsigned char, unsigned char);
 void i_8xy0(unsigned char, unsigned char);
 void i_fx55(unsigned char);
 void i_fx65(unsigned char);

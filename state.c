@@ -55,11 +55,31 @@ bool keyF = false;
 WINDOW* createDrawWindow()
 {
 	WINDOW* win;
+
+	// draw window + border
 	int height = 32;
 	int width = 64;
-	width *= 2; // characters are too narrow to be pixels
-	win = newwin(height + 2, width + 2, (LINES - height) / 2, (COLS - width) / 2);
+	win = newwin(height + 1, width + 1, (LINES - height) / 2, (COLS - width) / 2);
 	box(win, 0, 0);
+
+	// todo: try to get screen bool array into the mvwprintw
+
+	//char drawbuf[] = {'#', ' ', '#', '\0'};
+	char* drawbuf = malloc(width * height + 1);
+	for (int h = 0; h < height - 1; h++)
+	{
+		for (int w = 0; w < width - 1; w++)
+		{
+			if (screen[w + h*width])
+				drawbuf[w] = '#';
+			else
+				drawbuf[w] = ' ';
+		}
+
+		drawbuf[width * height] = '\0';
+		mvwprintw(win, h + 1, 1, drawbuf);
+	}
+
 	wrefresh(win);
 	return win;
 }

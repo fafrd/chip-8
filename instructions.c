@@ -23,6 +23,14 @@ void i_8xy0(unsigned char x, unsigned char y)
 	*vx = *vy;
 }
 
+// Add the value NN to register VX
+void i_7xnn(unsigned char x, unsigned char nn)
+{
+	unsigned char *vx = getVxReg(x);
+
+	*vx = *vx + nn;
+}
+
 // Add the value of register VY to register VX
 // Set VF to 01 if a carry occurs
 // Set VF to 00 if a carry does not occur
