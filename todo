@@ -22,7 +22,15 @@ done
 - implement keypad instructions, fx0a ex9e exa1
 - create graphics area (64x32)
 - create graphics draw code. (each loop, read graphics array to screen)
-
-todo
 - implement clear screen instruction, 00e0
 - implement sprite draw instruction, dxyn
+- move debug messages into messageWindow
+
+todo
+- check if file exists before running
+
+backlog
+- how do i implement sound? system beep lol?
+- handle graceful exit if rom "completes"
+- merge 'run', 'disassemble' methods? not sure...
+- set emulation speed from cli flag
