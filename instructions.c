@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <ncurses.h>
+#include <string.h>
 #include "instructions.h"
 #include "state.h"
 #include "util.h"
@@ -383,55 +384,57 @@ void i_cxnn(unsigned char x, unsigned char nn)
 void i_fx29(unsigned char x)
 {
 	unsigned char *vx = getVxReg(x);
+	wprintw(messageWin, "fx29: v[%hhx]: %hhx\n", x, *vx);
+	wrefresh(messageWin);
 	switch (*vx)
 	{
 		case 0x0:
 			r_i = 0x00;
 			break;
 		case 0x1:
-			r_i = 0x0a;
+			r_i = 0x05;
 			break;
 		case 0x2:
-			r_i = 0x14;
+			r_i = 0x0a;
 			break;
 		case 0x3:
-			r_i = 0x1e;
+			r_i = 0x0f;
 			break;
 		case 0x4:
-			r_i = 0x28;
+			r_i = 0x14;
 			break;
 		case 0x5:
-			r_i = 0x32;
+			r_i = 0x19;
 			break;
 		case 0x6:
-			r_i = 0x3c;
+			r_i = 0x1e;
 			break;
 		case 0x7:
-			r_i = 0x46;
+			r_i = 0x23;
 			break;
 		case 0x8:
-			r_i = 0x50;
+			r_i = 0x28;
 			break;
 		case 0x9:
-			r_i = 0x5a;
+			r_i = 0x2d;
 			break;
 		case 0xa:
-			r_i = 0x64;
+			r_i = 0x32;
 			break;
 		case 0xb:
-			r_i = 0x6e;
+			r_i = 0x37;
 			break;
 		case 0xc:
-			r_i = 0x78;
+			r_i = 0x3c;
 			break;
 		case 0xd:
-			r_i = 0x82;
+			r_i = 0x41;
 			break;
 		case 0xe:
-			r_i = 0x8c;
+			r_i = 0x46;
 			break;
 		case 0xf:
-			r_i = 0x96;
+			r_i = 0x4b;
 			break;
 	}
 }
@@ -457,7 +460,9 @@ void i_fx0a(unsigned char x)
 {
 	unsigned char *vx = getVxReg(x);
 
-	*vx = mapKey(getch());
+	unsigned char key = mapKey(getch());
+	if (key != 0xff)
+		*vx = key;
 }
 
 // Skip the following instruction if the key corresponding to the hex value currently stored in register VX is pressed
@@ -491,4 +496,41 @@ void i_dxyn(unsigned char x, unsigned char y, unsigned char n)
 	unsigned char *vx = getVxReg(x);
 	unsigned char *vy = getVxReg(y);
 	
+	if (*vx > 0x3f || *vy > 0x1f) // out of screen range
+		return;
+
+	// todo- check that we aren't starting in range and writing outside of range
+
+	for (int i = 0; i < n; i++)
+	{
+		// create a bool array from char
+		unsigned char memoryByte = mem[r_i + i];
+		bool drawBufByte[8];
+		drawBufByte[0] = memoryByte & 0b10000000;
+		drawBufByte[1] = memoryByte & 0b01000000;
+		drawBufByte[2] = memoryByte & 0b00100000;
+		drawBufByte[3] = memoryByte & 0b00010000;
+		drawBufByte[4] = memoryByte & 0b00001000;
+		drawBufByte[5] = memoryByte & 0b00000100;
+		drawBufByte[6] = memoryByte & 0b00000010;
+		drawBufByte[7] = memoryByte & 0b00000001;
+
+		wprintw(messageWin, "i: %hhx, memoryByte: %hhx\n", i, memoryByte);
+		wrefresh(messageWin);
+
+		//memcpy(&screen[*vx + (64 * i) + (64 * *vy)], drawBufByte, 8);
+
+		void* screenPtr = &screen[*vx + (64 * i) + (64 * *vy)];
+
+		// get current byte of screen at this location, so we can XOR it
+		bool oldScreenByte[8] = {0};
+		memcpy(oldScreenByte, screenPtr, 8);
+
+		for (int j = 0 ; j < 8; j++)
+			drawBufByte[j] ^= oldScreenByte[j];
+
+		memcpy(screenPtr, drawBufByte, 8);
+	}
+
 }
+

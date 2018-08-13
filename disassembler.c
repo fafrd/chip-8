@@ -105,7 +105,7 @@ void disassemble(size_t length)
 				// target register is second nibble
 				unsigned char targetReg = current_upper & 0x0f;
 				// 6xnn - load current_lower into targetReg
-				printf("LD V%hhX", targetReg);
+				printf("LD V%hhX, %hhx", targetReg, current_lower);
 				break;
 			}
 			case 0x7:

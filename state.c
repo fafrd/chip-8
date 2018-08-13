@@ -12,6 +12,9 @@ unsigned char *mem;
 unsigned short *stack;
 bool *screen;
 
+WINDOW* drawWin;
+WINDOW* messageWin;
+
 unsigned short r_i;
 unsigned char r_v0;
 unsigned char r_v1;
@@ -52,19 +55,20 @@ bool keyD = false;
 bool keyE = false;
 bool keyF = false;
 
-WINDOW* createDrawWindow()
+void createDrawWindow()
 {
-	WINDOW* win;
-
 	// draw window + border
-	win = newwin(33, 65, (LINES - 32) / 2, (COLS - 96) / 2);
-	box(win, 0, 0);
+	drawWin = newwin(34, 66, (LINES - 32) / 2, (COLS - 96) / 2);
+	box(drawWin, 0, 0);
 
 	char* drawbuf = malloc(64 * 32 + 1);
-	for (int h = 0; h < 32 - 1; h++)
+	for (int h = 0; h < 32; h++)
 	{
-		for (int w = 0; w < 64 - 1; w++)
+		for (int w = 0; w < 64; w++)
 		{
+			// read 'screen' bool array...
+			// if element is true, write # to screen
+			// else, write space character
 			if (screen[w + h*64])
 				drawbuf[w] = '#';
 			else
@@ -72,24 +76,20 @@ WINDOW* createDrawWindow()
 		}
 
 		drawbuf[64 * 32] = '\0';
-		mvwprintw(win, h + 1, 1, drawbuf);
+		mvwprintw(drawWin, h + 1, 1, drawbuf);
 	}
 
-	wrefresh(win);
-	return win;
+	wrefresh(drawWin);
 }
 
-WINDOW* createMessageWindow()
+void createMessageWindow()
 {
-	WINDOW* win;
-
 	// draw window
 	// nlines, ncols, begin_y, begin_x
-	win = newwin(31, 31, ((LINES - 32) / 2) + 1, ((COLS + 34) / 2) + 1);
+	messageWin = newwin(31, 31, ((LINES - 32) / 2) + 1, ((COLS + 34) / 2) + 1);
 	//box(win, 0, 0);
 
-	wrefresh(win);
-	return win;
+	wrefresh(messageWin);
 }
 
 void* updateTimers(void* arg)
@@ -97,7 +97,8 @@ void* updateTimers(void* arg)
 	useconds_t sixtyHzDelay = 16667;
 	while (1)
 	{
-		//printf("timer sleep...\n");
+		if (messageWin != 0)
+			wprintw(messageWin, "timer sleep... dt is %hhx\n", r_dt);
 		usleep(sixtyHzDelay);
 		if (r_dt > 0)
 			r_dt--;
@@ -106,6 +107,8 @@ void* updateTimers(void* arg)
 	}
 }
 
+// given keypress, returns chip key mapping
+// returns 0xff on unexpected key press
 unsigned char mapKey(int getchResult)
 {
 	//  1 2 3 C                                   1 2 3 4
@@ -148,76 +151,62 @@ unsigned char mapKey(int getchResult)
 		case 118: // keyboard V
 			return 0xF;
 		default:
-			return 0x0;
+			return 0xff; // invalid result
 	}
 }
 
 void updateKeyState(unsigned char chipKey)
 {
+	clearAllKeyStates();
+
 	switch (chipKey)
 	{
 		case 0x1:
-			clearAllKeyStates();
 			key1 = true;
 			break;
 		case 0x2:
-			clearAllKeyStates();
 			key2 = true;
 			break;
 		case 0x3:
-			clearAllKeyStates();
 			key3 = true;
 			break;
 		case 0x4:
-			clearAllKeyStates();
 			key4 = true;
 			break;
 		case 0x5:
-			clearAllKeyStates();
 			key5 = true;
 			break;
 		case 0x6:
-			clearAllKeyStates();
 			key6 = true;
 			break;
 		case 0x7:
-			clearAllKeyStates();
 			key7 = true;
 			break;
 		case 0x8:
-			clearAllKeyStates();
 			key8 = true;
 			break;
 		case 0x9:
-			clearAllKeyStates();
 			key9 = true;
 			break;
 		case 0x0:
-			clearAllKeyStates();
 			key0 = true;
 			break;
 		case 0xA:
-			clearAllKeyStates();
 			keyA = true;
 			break;
 		case 0xB:
-			clearAllKeyStates();
 			keyB = true;
 			break;
 		case 0xC:
-			clearAllKeyStates();
 			keyC = true;
 			break;
 		case 0xD:
-			clearAllKeyStates();
 			keyD = true;
 			break;
 		case 0xE:
-			clearAllKeyStates();
 			keyE = true;
 			break;
 		case 0xF:
-			clearAllKeyStates();
 			keyF = true;
 			break;
 	}

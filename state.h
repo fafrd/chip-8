@@ -12,8 +12,8 @@ unsigned char mapKey(int);
 void updateKeyState(unsigned char);
 void clearAllKeyStates();
 bool getStateForKey(unsigned char);
-WINDOW* createDrawWindow();
-WINDOW* createMessageWindow();
+void createDrawWindow();
+void createMessageWindow();
 void clearScreen();
 
 // main memory
@@ -24,6 +24,10 @@ extern unsigned short* stack;
 
 // the screen is an array of boolean values
 bool* screen;
+
+// ncurses windows
+WINDOW* drawWin;
+WINDOW* messageWin;
 
 // general purpose registers
 extern unsigned short r_i;

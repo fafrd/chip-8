@@ -31,11 +31,11 @@ void loop()
 	curs_set(0); // cursor is invisible
 
 	// create main window for CHIP-8 display
-	WINDOW* drawWin = createDrawWindow();
+	createDrawWindow();
     nodelay(drawWin, TRUE); // sets getch() to be a non-blocking call
 
 	// create secondary window for messages
-	WINDOW* messageWin = createMessageWindow();
+	createMessageWindow();
     nodelay(messageWin, TRUE); // sets getch() to be a non-blocking call
 
     scrollok(messageWin, TRUE);
@@ -67,20 +67,21 @@ void loop()
 	unsigned char current_upper, current_lower;
 	unsigned short current;
 
-	useconds_t delayTime = 300000; // 300 ms
+	//useconds_t delayTime = 300000; // 300 ms
+	useconds_t delayTime = 1000; // 1 ms
 
-	// *** delete from here
-	for (int i = 0; i < 2048; i++)
-	{
-		screen[i] = i % 2;
-	}
+	// *** debug code- sets screen to all #
+	//for (int i = 0; i < 2048; i++)
+	//{
+	//	screen[i] = i % 2;
+	//}
 	// **** to here
 
 	while (1)
 	{
 		// draw previous loop output
 		delwin(drawWin);
-		drawWin = createDrawWindow();
+		createDrawWindow();
 
 		// delay between each instruction
 		usleep(delayTime);
@@ -89,7 +90,8 @@ void loop()
 		if (kbhit(messageWin))
 		{
 			unsigned char keyHit = mapKey(wgetch(messageWin));
-			updateKeyState(keyHit);
+			if (keyHit != 0xff)
+				updateKeyState(keyHit);
 		}
 
 		// set current instruction...
@@ -324,7 +326,7 @@ void loop()
 				// target register y is third nibble
 				unsigned char targetRegY = current_lower >> 4;
 				// n is last nibble
-				unsigned char n = current_lower & 0X0f;
+				unsigned char n = current_lower & 0x0f;
 
 				// dxyn - read n bytes from memory, starting at memory location stored in 
 				// the I register, and draw them as sprites to screen at coordinates specified as
@@ -510,6 +512,7 @@ int main(int argc, char *argv[])
 	{
 		// start main program processing loop
 		loop();
+		printf("Execution complete.\n");
 
 		if (debug)
 		{
@@ -532,6 +535,5 @@ int main(int argc, char *argv[])
 	}
 
 	free(buffer);
-	printf("Execution complete.\n");
 	return retval;
 }
