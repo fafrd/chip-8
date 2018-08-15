@@ -87,8 +87,10 @@ void loop()
 		usleep(delayTime);
 
 		// update key pressed state
-		if (kbhit(messageWin))
+		int ch = wgetch(messageWin);
+		if (ch != ERR)
 		{
+			ungetch(ch);
 			//unsigned char keyHit = mapKey(wgetch(messageWin));
 			unsigned char keyHit = mapKey(getch());
 			if (keyHit != 0xff)

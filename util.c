@@ -61,20 +61,6 @@ bool xorToPoint(int x, int y, bool val)
 	return prevScreenBool & val;
 }
 
-bool kbhit(WINDOW* win)
-{
-	int ch = wgetch(win);
-	if (ch != ERR)
-	{
-		ungetch(ch);
-		return true;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
 // ensure program counter register is a valid address
 bool validPC(unsigned short nnn)
 {
