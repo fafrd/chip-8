@@ -28,9 +28,10 @@ done
 
 todo
 - check if file exists before running
+- fix apparent bug with key presses? e.g. pong, the cursor keeps moving...
+- set emulation speed from cli flag
 
 backlog
 - how do i implement sound? system beep lol?
 - handle graceful exit if rom "completes"
 - merge 'run', 'disassemble' methods? not sure...
-- set emulation speed from cli flag

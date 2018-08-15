@@ -97,8 +97,8 @@ void* updateTimers(void* arg)
 	useconds_t sixtyHzDelay = 16667;
 	while (1)
 	{
-		if (messageWin != 0)
-			wprintw(messageWin, "timer sleep... dt is %hhx\n", r_dt);
+		//if (messageWin != 0)
+			//wprintw(messageWin, "timer sleep... dt is %hhx\n", r_dt);
 		usleep(sixtyHzDelay);
 		if (r_dt > 0)
 			r_dt--;

@@ -67,8 +67,8 @@ void loop()
 	unsigned char current_upper, current_lower;
 	unsigned short current;
 
-	//useconds_t delayTime = 300000; // 300 ms
-	useconds_t delayTime = 1000; // 1 ms
+	useconds_t delayTime = 8333; // 120hz
+	//useconds_t delayTime = 3333; // 300hz
 
 	// *** debug code- sets screen to all #
 	//for (int i = 0; i < 2048; i++)
@@ -89,7 +89,8 @@ void loop()
 		// update key pressed state
 		if (kbhit(messageWin))
 		{
-			unsigned char keyHit = mapKey(wgetch(messageWin));
+			//unsigned char keyHit = mapKey(wgetch(messageWin));
+			unsigned char keyHit = mapKey(getch());
 			if (keyHit != 0xff)
 				updateKeyState(keyHit);
 		}
@@ -100,8 +101,8 @@ void loop()
 		current_lower = mem[r_pc+1];
 		current = (((short)current_upper) << 8) | current_lower;
 
-		wprintw(messageWin, "pc: %03hx, instruction: %04hx\n", r_pc, current);
-		wrefresh(messageWin);
+		//wprintw(messageWin, "pc: %03hx, instruction: %04hx\n", r_pc, current);
+		//wrefresh(messageWin);
 
 		// switch on first nibble (4 bits)
 		switch (current_upper >> 4)

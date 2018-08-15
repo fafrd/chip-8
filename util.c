@@ -43,6 +43,24 @@ void dumpKeyState()
 	printw("A 0 B F: %d %d %d %d\n", keyA, key0, keyB, keyF);
 }
 
+bool xorToPoint(int x, int y, bool val)
+{
+	// wrap around
+	x = x % 64;
+	y = y % 32;
+
+	int screenOffset = x + (64 * y);
+	bool* screenPtr = &screen[screenOffset];
+
+	bool prevScreenBool = *screenPtr;
+	bool newScreenBool = val ^ prevScreenBool;
+
+	*screenPtr = newScreenBool;
+
+	// if the prev point became unset, return true
+	return prevScreenBool & val;
+}
+
 bool kbhit(WINDOW* win)
 {
 	int ch = wgetch(win);

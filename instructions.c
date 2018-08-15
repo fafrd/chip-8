@@ -384,8 +384,8 @@ void i_cxnn(unsigned char x, unsigned char nn)
 void i_fx29(unsigned char x)
 {
 	unsigned char *vx = getVxReg(x);
-	wprintw(messageWin, "fx29: v[%hhx]: %hhx\n", x, *vx);
-	wrefresh(messageWin);
+	//wprintw(messageWin, "fx29: v[%hhx]: %hhx\n", x, *vx);
+	//wrefresh(messageWin);
 	switch (*vx)
 	{
 		case 0x0:
@@ -495,42 +495,47 @@ void i_dxyn(unsigned char x, unsigned char y, unsigned char n)
 {
 	unsigned char *vx = getVxReg(x);
 	unsigned char *vy = getVxReg(y);
+	bool unsetOccured = false;
 	
 	if (*vx > 0x3f || *vy > 0x1f) // out of screen range
-		return;
-
-	// todo- check that we aren't starting in range and writing outside of range
-
-	for (int i = 0; i < n; i++)
 	{
-		// create a bool array from char
-		unsigned char memoryByte = mem[r_i + i];
-		bool drawBufByte[8];
-		drawBufByte[0] = memoryByte & 0b10000000;
-		drawBufByte[1] = memoryByte & 0b01000000;
-		drawBufByte[2] = memoryByte & 0b00100000;
-		drawBufByte[3] = memoryByte & 0b00010000;
-		drawBufByte[4] = memoryByte & 0b00001000;
-		drawBufByte[5] = memoryByte & 0b00000100;
-		drawBufByte[6] = memoryByte & 0b00000010;
-		drawBufByte[7] = memoryByte & 0b00000001;
-
-		wprintw(messageWin, "i: %hhx, memoryByte: %hhx\n", i, memoryByte);
+		wprintw(messageWin, "Invalid draw outside screen range!\n");
 		wrefresh(messageWin);
-
-		//memcpy(&screen[*vx + (64 * i) + (64 * *vy)], drawBufByte, 8);
-
-		void* screenPtr = &screen[*vx + (64 * i) + (64 * *vy)];
-
-		// get current byte of screen at this location, so we can XOR it
-		bool oldScreenByte[8] = {0};
-		memcpy(oldScreenByte, screenPtr, 8);
-
-		for (int j = 0 ; j < 8; j++)
-			drawBufByte[j] ^= oldScreenByte[j];
-
-		memcpy(screenPtr, drawBufByte, 8);
+		return;
 	}
 
+	int baseX = *vx;
+	int baseY = *vy;
+
+	for (int iterDown = 0; iterDown < n; iterDown++)
+	{
+		unsigned char memoryByte = mem[r_i + iterDown];
+		bool spriteRow[8];
+		spriteRow[0] = memoryByte & 0b10000000;
+		spriteRow[1] = memoryByte & 0b01000000;
+		spriteRow[2] = memoryByte & 0b00100000;
+		spriteRow[3] = memoryByte & 0b00010000;
+		spriteRow[4] = memoryByte & 0b00001000;
+		spriteRow[5] = memoryByte & 0b00000100;
+		spriteRow[6] = memoryByte & 0b00000010;
+		spriteRow[7] = memoryByte & 0b00000001;
+
+		int finalY = baseY + iterDown;
+		int finalX;
+
+		for (int iterAcross = 0; iterAcross < 8; iterAcross++)
+		{
+			finalX = baseX + iterAcross;
+
+			if (xorToPoint(finalX, finalY, spriteRow[iterAcross]))
+				unsetOccured = true;
+		}
+
+	}
+
+	if (unsetOccured)
+		r_vf = true;
+	else
+		r_vf = false;
 }
 
