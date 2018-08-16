@@ -81,6 +81,7 @@ void loop()
 
 	//useconds_t delayTime = 8333; // 120hz
 	useconds_t delayTime = 3333; // 300hz
+	//useconds_t delayTime = 100000; // 10hz
 
 	// *** debug code- sets screen to all #
 	//for (int i = 0; i < 2048; i++)
@@ -146,8 +147,8 @@ void loop()
 		current_lower = mem[r_pc+1];
 		current = (((short)current_upper) << 8) | current_lower;
 
-		//wprintw(messageWin, "pc: %03hx, instruction: %04hx\n", r_pc, current);
-		//wrefresh(messageWin);
+		wprintw(messageWin, "pc: %03hx, instruction: %04hx\n", r_pc, current);
+		wrefresh(messageWin);
 
 		// switch on first nibble (4 bits)
 		switch (current_upper >> 4)
