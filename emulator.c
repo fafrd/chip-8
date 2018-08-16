@@ -4,6 +4,7 @@
 #include <stdbool.h> 
 #include <unistd.h>
 #include <ncurses.h>
+#include <termios.h>
 #include "disassembler.h"
 #include "state.h"
 #include "instructions.h"
@@ -40,6 +41,17 @@ void loop()
 
     scrollok(messageWin, TRUE);
 
+	// change terminal mode, allowing raw keypresses to be read
+	static struct termios oldt, newt;
+	tcgetattr(STDIN_FILENO, &oldt);
+	newt = oldt;
+	newt.c_lflag &= ~(ICANON | ECHO);
+	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+	// hacky way to reset key state. see kbhit() call below
+	int keyResetCounter = 0;
+	const int counterMax = 50;
+
 	mvwprintw(drawWin, 4, 10, "CHIP-8 INTERPRETER");
 	mvwprintw(drawWin, 5, 14, "by kian");
 	wrefresh(drawWin);
@@ -67,8 +79,8 @@ void loop()
 	unsigned char current_upper, current_lower;
 	unsigned short current;
 
-	useconds_t delayTime = 8333; // 120hz
-	//useconds_t delayTime = 3333; // 300hz
+	//useconds_t delayTime = 8333; // 120hz
+	useconds_t delayTime = 3333; // 300hz
 
 	// *** debug code- sets screen to all #
 	//for (int i = 0; i < 2048; i++)
@@ -87,15 +99,46 @@ void loop()
 		usleep(delayTime);
 
 		// update key pressed state
-		int ch = wgetch(messageWin);
-		if (ch != ERR)
+		if (kbhit())
 		{
-			ungetch(ch);
-			//unsigned char keyHit = mapKey(wgetch(messageWin));
-			unsigned char keyHit = mapKey(getch());
+			int ch = getchar();
+			//wprintw(messageWin, "Got %c\n", ch);
+			//wrefresh(messageWin);
+			unsigned char keyHit = mapKey(ch);
 			if (keyHit != 0xff)
 				updateKeyState(keyHit);
+
+			keyResetCounter = 0;
 		}
+		else
+		{
+			// this is a hacky way to deal with no-key-pressed event...
+			// the way kbhit() works is that it returns when a key is pressed,
+			// but after it is pressed the key press state is not true until
+			// the key is sent AGAIN to the terminal. This effectively means that,
+			// while a key is held down, we have to implement a delay, otherwise
+			// the key is considered un-pressed until the terminal receives a
+			// repeated key hit, as if typing aaaaaaaa by holding down the a key
+			if (keyResetCounter >= counterMax)
+			{
+				clearAllKeyStates();
+				keyResetCounter = 0;
+			}
+			else
+			{
+				keyResetCounter++;
+			}
+		}
+
+		//int ch = wgetch(messageWin);
+		//if (ch != ERR)
+		//{
+		//	ungetch(ch);
+		//	//unsigned char keyHit = mapKey(wgetch(messageWin));
+		//	unsigned char keyHit = mapKey(getch());
+		//	if (keyHit != 0xff)
+		//		updateKeyState(keyHit);
+		//}
 
 		// set current instruction...
 		// instructions are 2 bytes, get upper+lower byte, combine

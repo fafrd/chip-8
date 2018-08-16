@@ -482,11 +482,11 @@ void i_exa1(unsigned char x)
 	if (!getStateForKey(*vx))
 		r_pc += 2;
 
-	if (!getStateForKey(*vx))
-		wprintw(messageWin, "getStateForKey is FALSE for %hhx\n", *vx);
-	else
-		wprintw(messageWin, "getStateForKey is TRUE for %hhx\n", *vx);
-	wrefresh(messageWin);
+	//if (!getStateForKey(*vx))
+	//	wprintw(messageWin, "getStateForKey is FALSE for %hhx\n", *vx);
+	//else
+	//	wprintw(messageWin, "getStateForKey is TRUE for %hhx\n", *vx);
+	//wrefresh(messageWin);
 }
 
 // Clear the screen
