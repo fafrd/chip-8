@@ -533,6 +533,11 @@ int main(int argc, char *argv[])
 	// read romfile into buffer
 	unsigned char *buffer;
 	size_t length;
+	if (access(filename, R_OK) == -1)
+	{
+		printf("invalid filename\n");
+		return 1;
+	}
 	readFile(filename, &buffer, &length);
 
 	bool loadSuccess = loadRomToMemory(&buffer, length);

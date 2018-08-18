@@ -25,9 +25,9 @@ done
 - implement clear screen instruction, 00e0
 - implement sprite draw instruction, dxyn
 - move debug messages into messageWindow
+- check if file exists before running
 
 todo
-- check if file exists before running
 - set emulation speed from cli flag
 
 backlog
