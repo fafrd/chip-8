@@ -491,13 +491,10 @@ void loop()
 void printUsage()
 {
 	printf("usage: emulator [run|disassemble] file.rom [flags]\n");
-	printf("flags:\n");
-	printf("\t--dump\tprints content of memory to log when execution is complete\n");
 }
 
 int main(int argc, char *argv[])
 {
-	bool memoryDump = false;
 	char* command;
 	char* filename;
 	if (argc < 3)
@@ -516,10 +513,10 @@ int main(int argc, char *argv[])
 			printUsage();
 			return 1;
 		}
-		else if (strcmp(argv[i], "--dump") == 0)
-		{
-			memoryDump = true;
-		}
+		//else if (strcmp(argv[i], "--dump") == 0)
+		//{
+		//	memoryDump = true;
+		//}
 		else
 		{
 			printUsage();
@@ -554,10 +551,10 @@ int main(int argc, char *argv[])
 		loop();
 		printf("Execution complete.\n");
 
-		if (memoryDump)
-		{
-			dumpMem();
-		}
+		//if (memoryDump)
+		//{
+		//	dumpMem();
+		//}
 	}
 	else if (command[0] == 'd')
 	{
