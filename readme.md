@@ -43,3 +43,4 @@ see the [todo](todo) file
 - intro to chip-8 (helpful for getting started) [www.emulator101.com/introduction-to-chip-8.html](http://www.emulator101.com/introduction-to-chip-8.html)
 - in-depth reference [mattmik.com/files/chip8/mastering/chip8.html](http://mattmik.com/files/chip8/mastering/chip8.html)
 - quick reference [devernay.free.fr/hacks/chip8/C8TECH10.HTM](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM)
+- good reference emulator for testing roms [www.newgrounds.com/portal/view/632197](https://www.newgrounds.com/portal/view/632197)
