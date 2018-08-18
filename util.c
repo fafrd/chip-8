@@ -24,18 +24,19 @@ void dumpMem()
 	printf("\n");
 }
 
-void dumpRegs()
+void dumpRegs(WINDOW* win)
 {
-	printf("i:\t%hx\n", r_i);
-	printf("v0:\t%hhx\tv1:\t%hhx\tv2:\t%hhx\tv3:\t%hhx\t\n", r_v0, r_v1, r_v2, r_v3);
-	printf("v4:\t%hhx\tv5:\t%hhx\tv6:\t%hhx\tv7:\t%hhx\t\n", r_v4, r_v5, r_v6, r_v7);
-	printf("v8:\t%hhx\tv9:\t%hhx\tva:\t%hhx\tvb:\t%hhx\t\n", r_v8, r_v9, r_va, r_vb);
-	printf("vc:\t%hhx\tvd:\t%hhx\tve:\t%hhx\tvf:\t%hhx\t\n", r_vc, r_vd, r_ve, r_vf);
+	werase(win);
+	wprintw(win, "i: %04hx\n", r_i);
+	wprintw(win, "v0: %02hhx\tv1: %02hhx\tv2: %02hhx\tv3: %02hhx\n", r_v0, r_v1, r_v2, r_v3);
+	wprintw(win, "v4: %02hhx\tv5: %02hhx\tv6: %02hhx\tv7: %02hhx\n", r_v4, r_v5, r_v6, r_v7);
+	wprintw(win, "v8: %02hhx\tv9: %02hhx\tva: %02hhx\tvb: %02hhx\n", r_v8, r_v9, r_va, r_vb);
+	wprintw(win, "vc: %02hhx\tvd: %02hhx\tve: %02hhx\tvf: %02hhx\n", r_vc, r_vd, r_ve, r_vf);
 
-	printf("pc:\t%hx\tsp:\t%hhx\n", r_pc, r_sp);
-	printf("dt:\t%hhx\tst:\t%hhx\t", r_dt, r_st);
+	wprintw(win, "pc: %04hx\tsp: %02hhx\n", r_pc, r_sp);
+	wprintw(win, "dt: %02hhx\tst: %02hhx\n", r_dt, r_st);
 
-	printf("\n");
+	wrefresh(win);
 }
 
 void dumpKeyState()

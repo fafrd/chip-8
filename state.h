@@ -14,6 +14,7 @@ void clearAllKeyStates();
 bool getStateForKey(unsigned char);
 void createDrawWindow();
 void createMessageWindow();
+void createRegisterWindow();
 void clearScreen();
 
 // main memory
@@ -28,6 +29,7 @@ bool* screen;
 // ncurses windows
 WINDOW* drawWin;
 WINDOW* messageWin;
+WINDOW* registerWin;
 
 // general purpose registers
 extern unsigned short r_i;

@@ -10,8 +10,6 @@
 #include "instructions.h"
 #include "util.h"
 
-bool debug = false;
-
 // copies buffer to mem starting at mem[0x200]
 // returns 0 on success
 bool loadRomToMemory(unsigned char **buffer, size_t length)
@@ -38,8 +36,12 @@ void loop()
 	// create secondary window for messages
 	createMessageWindow();
     nodelay(messageWin, TRUE); // sets getch() to be a non-blocking call
-
     scrollok(messageWin, TRUE);
+
+	// create window to print register states
+	createRegisterWindow();
+    nodelay(registerWin, TRUE); // sets getch() to be a non-blocking call
+    scrollok(registerWin, FALSE);
 
 	// change terminal mode, allowing raw keypresses to be read
 	static struct termios oldt, newt;
@@ -96,6 +98,9 @@ void loop()
 		delwin(drawWin);
 		createDrawWindow();
 
+		// update register state
+		createRegisterWindow();
+
 		// delay between each instruction
 		usleep(delayTime);
 
@@ -103,8 +108,6 @@ void loop()
 		if (kbhit())
 		{
 			int ch = getchar();
-			//wprintw(messageWin, "Got %c\n", ch);
-			//wrefresh(messageWin);
 			unsigned char keyHit = mapKey(ch);
 			if (keyHit != 0xff)
 				updateKeyState(keyHit);
@@ -130,16 +133,6 @@ void loop()
 				keyResetCounter++;
 			}
 		}
-
-		//int ch = wgetch(messageWin);
-		//if (ch != ERR)
-		//{
-		//	ungetch(ch);
-		//	//unsigned char keyHit = mapKey(wgetch(messageWin));
-		//	unsigned char keyHit = mapKey(getch());
-		//	if (keyHit != 0xff)
-		//		updateKeyState(keyHit);
-		//}
 
 		// set current instruction...
 		// instructions are 2 bytes, get upper+lower byte, combine
@@ -499,7 +492,6 @@ void printUsage()
 {
 	printf("usage: emulator [run|disassemble] file.rom [flags]\n");
 	printf("flags:\n");
-	printf("\t--debug\tprints debug messages to log\n");
 	printf("\t--dump\tprints content of memory to log when execution is complete\n");
 }
 
@@ -523,10 +515,6 @@ int main(int argc, char *argv[])
 		{
 			printUsage();
 			return 1;
-		}
-		else if (strcmp(argv[i], "--debug") == 0)
-		{
-			debug = true;
 		}
 		else if (strcmp(argv[i], "--dump") == 0)
 		{
@@ -561,11 +549,6 @@ int main(int argc, char *argv[])
 		loop();
 		printf("Execution complete.\n");
 
-		if (debug)
-		{
-			printf("register dump:\n");
-			dumpRegs();
-		}
 		if (memoryDump)
 		{
 			dumpMem();

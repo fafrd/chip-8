@@ -14,6 +14,7 @@ bool *screen;
 
 WINDOW* drawWin;
 WINDOW* messageWin;
+WINDOW* registerWin;
 
 unsigned short r_i;
 unsigned char r_v0;
@@ -86,10 +87,17 @@ void createMessageWindow()
 {
 	// draw window
 	// nlines, ncols, begin_y, begin_x
-	messageWin = newwin(31, 31, ((LINES - 32) / 2) + 1, ((COLS + 34) / 2) + 1);
-	//box(win, 0, 0);
+	messageWin = newwin(26, 31, ((LINES - 32) / 2) + 8, ((COLS + 34) / 2) + 1);
 
 	wrefresh(messageWin);
+}
+
+void createRegisterWindow()
+{
+	// nlines, ncols, begin_y, begin_x
+	registerWin = newwin(8, 31, ((LINES - 32) / 2) + 1, ((COLS + 34) / 2) + 1);
+	// update register state
+	dumpRegs(registerWin);
 }
 
 void* updateTimers(void* arg)
