@@ -56,9 +56,7 @@ void i_8xy5(unsigned char x, unsigned char y)
 	unsigned char *vx = getVxReg(x);
 	unsigned char *vy = getVxReg(y);
 
-	//printf("%x < %x = %d\n", *vx, *vy, *vx > *vy);
-
-	if (*vx < *vy)
+	if (*vx > *vy)
 		r_vf = 0x01;
 	else
 		r_vf = 0x00;
@@ -74,9 +72,7 @@ void i_8xy7(unsigned char x, unsigned char y)
 	unsigned char *vx = getVxReg(x);
 	unsigned char *vy = getVxReg(y);
 
-	//printf("%x > %x = %d\n", *vx, *vy, *vx > *vy);
-
-	if (*vx > *vy)
+	if (*vx < *vy)
 		r_vf = 0x01;
 	else
 		r_vf = 0x00;
