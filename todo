@@ -27,12 +27,9 @@ done
 - move debug messages into messageWindow
 
 todo
-- figure out why pong hits not working in pong.rom
 - check if file exists before running
-- fix apparent bug with key presses? e.g. pong, the cursor keeps moving...
 - set emulation speed from cli flag
 
 backlog
 - how do i implement sound? system beep lol?
-- handle graceful exit if rom "completes"
 - merge 'run', 'disassemble' methods? not sure...
