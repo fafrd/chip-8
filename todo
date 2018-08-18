@@ -28,8 +28,7 @@ done
 - check if file exists before running
 
 todo
-- set emulation speed from cli flag
+- how do i implement sound? system beep lol?
 
 backlog
-- how do i implement sound? system beep lol?
 - merge 'run', 'disassemble' methods? not sure...

@@ -21,7 +21,7 @@ bool loadRomToMemory(unsigned char **buffer, size_t length)
 }
 
 // main instruction processing loop
-void loop()
+void loop(unsigned int emulationSpeed)
 {
 	initscr(); // start curses mode
 
@@ -81,9 +81,12 @@ void loop()
 	unsigned char current_upper, current_lower;
 	unsigned short current;
 
-	//useconds_t delayTime = 8333; // 120hz
-	useconds_t delayTime = 3333; // 300hz
-	//useconds_t delayTime = 100000; // 10hz
+	// set wait time between cpu cycles
+	useconds_t delayTime;
+	if (emulationSpeed > 0)
+		delayTime = 1000000 / emulationSpeed;
+	else
+		delayTime = 3333; // 300hz
 
 	// *** debug code- sets screen to all #
 	//for (int i = 0; i < 2048; i++)
@@ -491,12 +494,16 @@ void loop()
 void printUsage()
 {
 	printf("usage: emulator [run|disassemble] file.rom [flags]\n");
+	printf("flags:\n");
+	printf("\t-s 120\tSets emulation speed in terms of cpu cycles/second (default: 300)\n");
 }
 
 int main(int argc, char *argv[])
 {
 	char* command;
 	char* filename;
+	bool emuSpeedSet = false;
+	unsigned int emuSpeed = 0;
 	if (argc < 3)
 	{
 		printUsage();
@@ -512,6 +519,24 @@ int main(int argc, char *argv[])
 		{
 			printUsage();
 			return 1;
+		}
+		else if (strcmp(argv[i], "--speed") == 0 || strcmp(argv[i], "-s") == 0)
+		{
+			if (argc > i + 1)
+			{
+				emuSpeedSet = true;
+				emuSpeed = (unsigned int)atoi(argv[++i]);
+				if (emuSpeed > 1000000 || emuSpeed < 1)
+				{
+					printf("Enter emulation speed between 1 and 1000000\n");
+					return 1;
+				}
+			}
+			else
+			{
+				printf("Enter emulation speed in terms of cycles/second\n");
+				return 1;
+			}
 		}
 		//else if (strcmp(argv[i], "--dump") == 0)
 		//{
@@ -548,7 +573,7 @@ int main(int argc, char *argv[])
 	if (command[0] == 'r')
 	{
 		// start main program processing loop
-		loop();
+		loop(emuSpeed);
 		printf("Execution complete.\n");
 
 		//if (memoryDump)

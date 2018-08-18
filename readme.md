@@ -22,6 +22,10 @@ clone and build
 run a game
 
     ./emulator run roms/pong.rom
+
+run a game at a specific speed (expressed in cycles/second. default 300hz)
+
+	./emulator run roms/pong.rom -s 10
     
 disassemble a game (print instructions using [Cowgod's](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM) syntax)
 
