@@ -28,7 +28,18 @@ done
 - check if file exists before running
 
 todo
-- how do i implement sound? system beep lol?
+- pre-emulation, wait for keypress to continue. pre-emulation screen should explain controls.
+- create controls
+	- pause/resume/step
+	- do/don't display debug registers/verbose debug text. (off by default)
+	- halt emulation
+	- modifying emulation speed
+		- delay timer should be related to emulation speed. (delay/sound sleep calculated as a fraction of global speed variable?)
+	- emulation quirks
+- investigate fx55, fx65... some references define these differently
+- create unit tests for instructions. test edge cases!
+- how do i implement sound? terminal ding?
 
 backlog
 - merge 'run', 'disassemble' methods? not sure...
+- generalize GUI code to allow a different gui framework
