@@ -493,7 +493,7 @@ void loop(unsigned int emulationSpeed)
 
 void printUsage()
 {
-	printf("usage: emulator [run|disassemble] file.rom [flags]\n");
+	printf("usage: chip8 [run|disassemble] file.rom [flags]\n");
 	printf("flags:\n");
 	printf("\t-s 120\tSets emulation speed in terms of cpu cycles/second (default: 300)\n");
 }

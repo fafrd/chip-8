@@ -6,13 +6,13 @@ OBJ = util.o disassembler.o state.o instructions.o
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-all: emulator test
+all: chip8 test
 
-emulator: $(OBJ) emulator.o
+chip8: $(OBJ) emulator.o
 	$(CC) -o $@ $^ $(CFLAGS)
 
 test: $(OBJ) unittest.o
 	$(CC) -o $@ $^ $(CFLAGS)
 
 clean:
-	rm -f *.o emulator
+	rm -f *.o test chip8
