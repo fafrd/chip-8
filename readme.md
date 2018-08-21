@@ -39,6 +39,12 @@ disassemble a game (print instructions using [Cowgod's](http://devernay.free.fr/
 	 7 8 9 E    keyboard keys -->              A S D F
 	 A 0 B F                                   Z X C V
 
+## testing
+
+run the unit tests with
+
+	./test
+
 ## todo
 see the [todo](todo) file
 
