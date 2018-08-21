@@ -17,8 +17,8 @@
 // I want to be mutated has been mutated.
 //
 // Also I skipped the following instructions. They would 
-// either be difficult to test deterministically or difficult
-// to automate:
+// either be difficult to test deterministically, or difficult
+// to automate, or just more work than want to do right now:
 // - cxnn random
 // - ex9e skip if key pressed
 // - exa1 skip if key not pressed
@@ -26,6 +26,7 @@
 // - fx07 read delay timer
 // - fx18 set sound timer
 // - fx29 set register i to location of hex digit sprite
+// - dxyn draw n length sprite at position vx, vy
 
 int testBranches();
 int testStores();
@@ -33,7 +34,6 @@ int testArithmetic();
 int testJumps();
 int testSubroutines();
 int testRegisterI();
-int testDraw();
 int testBCD();
 int testSaveLoadAllRegisters();
 
@@ -72,9 +72,6 @@ int main(int argc, char *argv[])
 
 	printf("testRegisterI()... ");
 	printResult(testRegisterI());
-
-	printf("testDraw()... ");
-	printResult(testDraw());
 
 	printf("testBCD())... ");
 	printResult(testBCD());
@@ -409,27 +406,58 @@ int testRegisterI()
 	return 0;
 }
 
-int testDraw()
-{
-	// dxyn
-	return -1;
-	
-	return 0;
-}
-
 int testBCD()
 {
 	// fx33
-	return -1;
-	
+	initializeState();
+	r_i = 0x345;
+	r_v6 = 0x1;
+	i_fx33(0x6);
+	if (mem[r_i] != 0)
+		return 1;
+	if (mem[r_i + 1] != 0)
+		return 1;
+	if (mem[r_i + 2] != 1)
+		return 1;
+
+	initializeState();
+	r_i = 0x345;
+	r_v6 = 0x19;
+	i_fx33(0x6);
+	if (mem[r_i] != 0)
+		return 1;
+	if (mem[r_i + 1] != 2)
+		return 1;
+	if (mem[r_i + 2] != 5)
+		return 1;
+
+	initializeState();
+	r_i = 0x345;
+	r_v6 = 0xeb;
+	i_fx33(0x6);
+	if (mem[r_i] != 2)
+		return 1;
+	if (mem[r_i + 1] != 3)
+		return 1;
+	if (mem[r_i + 2] != 5)
+		return 1;
+
+	initializeState();
+	r_i = 0x345;
+	r_v6 = 0xc8;
+	i_fx33(0x6);
+	if (mem[r_i] != 2)
+		return 1;
+	if (mem[r_i + 1] != 0)
+		return 1;
+	if (mem[r_i + 2] != 0)
+		return 1;
+
 	return 0;
 }
 
 int testSaveLoadAllRegisters()
 {
-	// TODO compare: some references implement these
-	// instructions differently... figure out what the
-	// differences are, exactly.
 
 	// fx55
 	// fx65
