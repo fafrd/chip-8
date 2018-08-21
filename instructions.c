@@ -178,7 +178,7 @@ void i_2nnn(unsigned short nnn)
 	//printf("r_sp: %x, stack[r_sp]: %x, nnn: %x\n", r_sp, stack[r_sp], nnn);
 
 	// prevent stack overflow
-	if (r_sp >= STACK_SIZE)
+	if (r_sp > STACK_SIZE)
 	{
 		printf("reached maximum stack size of %u. cannot continue.\n", STACK_SIZE);
 		exit(1);
