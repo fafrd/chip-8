@@ -496,6 +496,8 @@ void printUsage()
 	printf("usage: chip8 [run|disassemble] file.rom [flags]\n");
 	printf("flags:\n");
 	printf("\t-s 120\tSets emulation speed in terms of cpu cycles/second (default: 300)\n");
+	printf("\t--quirk-shift-result\tStore the result of a shift in vy instead of vx\n");
+	printf("\t--quirk-change-i-during-save-load\t Modify the I register after fx55/fx65\n");
 }
 
 int main(int argc, char *argv[])
@@ -538,10 +540,14 @@ int main(int argc, char *argv[])
 				return 1;
 			}
 		}
-		//else if (strcmp(argv[i], "--dump") == 0)
-		//{
-		//	memoryDump = true;
-		//}
+		else if (strcmp(argv[i], "--quirk-shift-result") == 0 || strcmp(argv[i], "-q1") == 0)
+		{
+			QUIRK_SHIFT_RESULT_IN_VY = true;
+		}
+		else if (strcmp(argv[i], "--quirk-change-i-during-save-load") == 0 || strcmp(argv[i], "-q2") == 0)
+		{
+			QUIRK_SET_I_AFTER_LOAD_STORE = true;
+		}
 		else
 		{
 			printUsage();

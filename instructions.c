@@ -7,7 +7,8 @@
 #include "state.h"
 #include "util.h"
 
-#define QUIRK_SHIFT_RESULT_IN_VY false
+bool QUIRK_SHIFT_RESULT_IN_VY = false;
+bool QUIRK_SET_I_AFTER_LOAD_STORE = false;
 
 // Store number NN in register VX
 void i_6xnn(unsigned char x, unsigned char nn)
@@ -121,11 +122,10 @@ void i_8xy6(unsigned char x, unsigned char y)
 
 	//printf("%x. vx & 1 = %x\n", *vx, 0x01 & *vx);
 	r_vf = 0x01 & *vx;
-#if QUIRK_SHIFT_RESULT_IN_VY
-	*vy = *vx >> 1;
-#else
-	*vx = *vx >> 1;
-#endif
+	if (QUIRK_SHIFT_RESULT_IN_VY)
+		*vy = *vx >> 1;
+	else
+		*vx = *vx >> 1;
 }
 
 // Store the value of register VY shifted left one bit in register VX
@@ -139,11 +139,10 @@ void i_8xye(unsigned char x, unsigned char y)
 		r_vf = 0x01;
 	else
 		r_vf = 0x00;
-#if QUIRK_SHIFT_RESULT_IN_VY
-	*vy = *vx << 1;
-#else
-	*vx = *vx << 1;
-#endif
+	if (QUIRK_SHIFT_RESULT_IN_VY)
+		*vy = *vx << 1;
+	else
+		*vx = *vx << 1;
 }
 
 // Jump to address NNN
@@ -299,7 +298,8 @@ void i_fx55(unsigned char x)
 	}
 
 	unsigned char *vx = getVxReg(x);
-	r_i += *vx + 1;
+	if (QUIRK_SET_I_AFTER_LOAD_STORE)
+		r_i += *vx + 1;
 }
 
 // Fill registers V0 to VX inclusive with the values stored in memory starting at address I
@@ -344,7 +344,8 @@ void i_fx65(unsigned char x)
 	}
 
 	unsigned char *vx = getVxReg(x);
-	r_i += *vx + 1;
+	if (QUIRK_SET_I_AFTER_LOAD_STORE)
+		r_i += *vx + 1;
 }
 
 // Set the delay timer to the value of register VX

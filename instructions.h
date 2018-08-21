@@ -1,6 +1,9 @@
 #ifndef INSTRUCTIONS_H
 #define INSTRUCTIONS_H
 
+bool QUIRK_SHIFT_RESULT_IN_VY;
+bool QUIRK_SET_I_AFTER_LOAD_STORE;
+
 void i_6xnn(unsigned char, unsigned char);
 void i_7xnn(unsigned char, unsigned char);
 void i_8xy0(unsigned char, unsigned char);
@@ -15,8 +18,7 @@ void i_8xy3(unsigned char, unsigned char);
 void i_8xy6(unsigned char, unsigned char);
 void i_8xye(unsigned char, unsigned char);
 void i_1nnn(unsigned short);
-void i_bnnn(unsigned short);
-void i_2nnn(unsigned short);
+void i_bnnn(unsigned short); void i_2nnn(unsigned short);
 void i_00ee();
 void i_0nnn(unsigned short);
 void i_3xnn(unsigned char, unsigned char);
