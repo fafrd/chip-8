@@ -412,6 +412,7 @@ int testRegisterI()
 int testDraw()
 {
 	// dxyn
+	return -1;
 	
 	return 0;
 }
@@ -419,6 +420,7 @@ int testDraw()
 int testBCD()
 {
 	// fx33
+	return -1;
 	
 	return 0;
 }
@@ -431,6 +433,7 @@ int testSaveLoadAllRegisters()
 
 	// fx55
 	// fx65
+	return -1;
 	
 	return 0;
 }
