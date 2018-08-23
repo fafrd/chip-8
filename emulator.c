@@ -25,23 +25,23 @@ void loop(unsigned int emulationSpeed)
 {
 	initscr(); // start curses mode
 
-    cbreak(); // allow ctrl c, ctrl z to work
-    noecho(); // don't echo what the user types
+	cbreak(); // allow ctrl c, ctrl z to work
+	noecho(); // don't echo what the user types
 	curs_set(0); // cursor is invisible
 
 	// create main window for CHIP-8 display
 	createDrawWindow();
-    nodelay(drawWin, TRUE); // sets getch() to be a non-blocking call
+	nodelay(drawWin, TRUE); // sets getch() to be a non-blocking call
 
 	// create secondary window for messages
 	createMessageWindow();
-    nodelay(messageWin, TRUE); // sets getch() to be a non-blocking call
-    scrollok(messageWin, TRUE);
+	nodelay(messageWin, TRUE); // sets getch() to be a non-blocking call
+	scrollok(messageWin, TRUE);
 
 	// create window to print register states
 	createRegisterWindow();
-    nodelay(registerWin, TRUE); // sets getch() to be a non-blocking call
-    scrollok(registerWin, FALSE);
+	nodelay(registerWin, TRUE); // sets getch() to be a non-blocking call
+	scrollok(registerWin, FALSE);
 
 	// change terminal mode, allowing raw keypresses to be read
 	static struct termios oldt, newt;
@@ -88,12 +88,10 @@ void loop(unsigned int emulationSpeed)
 	else
 		delayTime = 3333; // 300hz
 
-	// *** debug code- sets screen to all #
-	//for (int i = 0; i < 2048; i++)
-	//{
-	//	screen[i] = i % 2;
-	//}
-	// **** to here
+	// initialize variable containing emulation command requested
+	COMMAND com = UNDEFINED;
+	bool paused = false;
+	bool step = false;
 
 	while (1)
 	{
@@ -112,8 +110,70 @@ void loop(unsigned int emulationSpeed)
 		{
 			int ch = getchar();
 			unsigned char keyHit = mapKey(ch);
+			//wprintw(messageWin, "key: %c, keyhit: %x\n", ch, keyHit);
+			//wrefresh(messageWin);
+			com = UNDEFINED; // reset
 			if (keyHit != 0xff)
 				updateKeyState(keyHit);
+			else
+				com = parseCommandKey(ch);
+
+			//wprintw(messageWin, "com: %d\n", com);
+			//wrefresh(messageWin);
+commandParser:
+			switch (com)
+			{
+			
+				case ESCAPE:
+					exit(0);
+				    break;
+				case PAUSE:
+					if (paused)
+					{
+						wprintw(messageWin, "Emulation resumed.\n");
+						wrefresh(messageWin);
+						// if already paused, unpause
+						paused = false;
+						break;
+					}
+					else
+					{
+						wprintw(messageWin, "Emulation paused.\n");
+						wrefresh(messageWin);
+						paused = true;
+						// wait for a new key. when something happens, reenter this statement
+						com = parseCommandKey(getch());
+						goto commandParser;
+					}
+				    break;
+				case STEP:
+					step = true;
+				    break;
+				case SPEED_DOWN:
+					
+				    break;
+				case SPEED_UP:
+					
+				    break;
+				case PRINT_INSTRUCTIONS:
+					
+				    break;
+				case PRINT_REGISTERS:
+					
+				    break;
+				case QUIRK_SHIFT:
+					
+				    break;
+				case QUIRK_I:
+					
+				    break;
+			}
+
+			if (paused)
+			{
+				com = parseCommandKey(getch()); // wait on a keypress
+				goto commandParser; // bypass emulation loop if paused
+			}
 
 			keyResetCounter = 0;
 		}
@@ -143,8 +203,8 @@ void loop(unsigned int emulationSpeed)
 		current_lower = mem[r_pc+1];
 		current = (((short)current_upper) << 8) | current_lower;
 
-		wprintw(messageWin, "pc: %03hx, instruction: %04hx\n", r_pc, current);
-		wrefresh(messageWin);
+		//wprintw(messageWin, "pc: %03hx, instruction: %04hx\n", r_pc, current);
+		//wrefresh(messageWin);
 
 		// switch on first nibble (4 bits)
 		switch (current_upper >> 4)

@@ -272,6 +272,7 @@ int testArithmetic()
 
 	// 8xy6
 	initializeState();
+	QUIRK_SHIFT_RESULT_IN_VY = false;
 	r_v7 = 0b01010101;
 	r_v8 = 0b11001100;
 	r_vf = 0xff;
@@ -290,9 +291,16 @@ int testArithmetic()
 		return 1;
 	if (r_vf != 0x0)
 		return 1;
+
+	// set shift quirk...
+	QUIRK_SHIFT_RESULT_IN_VY = true;
+
+	// TODO test quirk result
+	return 2;
 	
 	// 8xye
 	initializeState();
+	QUIRK_SHIFT_RESULT_IN_VY = false;
 	r_v7 = 0b01010101;
 	r_v8 = 0b11001100;
 	r_vf = 0xff;
@@ -311,6 +319,12 @@ int testArithmetic()
 		return 1;
 	if (r_vf != 0x1)
 		return 1;
+
+	// set shift quirk...
+	QUIRK_SHIFT_RESULT_IN_VY = true;
+
+	// TODO test quirk result
+	return 2;
 	
 	return 0;
 }

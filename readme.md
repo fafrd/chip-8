@@ -32,12 +32,25 @@ disassemble a game (print instructions using [Cowgod's](http://devernay.free.fr/
     ./chip8 disassemble roms/pong.rom | less
 
 ## controls
-    chip keys                               keyboard keys
-    ---------                               -------------
+Game controls
+
+	chip keys                               keyboard keys
+	---------                               -------------
 	 1 2 3 C                                   1 2 3 4
  	 4 5 6 D    This is emulated with these    Q W E R
 	 7 8 9 E    keyboard keys -->              A S D F
 	 A 0 B F                                   Z X C V
+
+Emulation controls
+- esc		exit program
+- space		pause/resume emulation
+- slash		step emulation
+- comma		reduce emulation speed
+- period	increase emulation speed
+- semicolon	toggle live printing of instructions
+- apostrophe	toggle live display of registers
+- \[		set shift result quirk (affects instructions 8xy6, 8xye)
+- \]		set i register quirk (affects instructions fx55, fx65)
 
 ## testing
 

@@ -6,6 +6,21 @@
 
 #define STACK_SIZE 16
 
+// define COMMAND enumeration
+typedef enum COMMAND
+{
+	UNDEFINED = 0,
+	ESCAPE = 1,
+	PAUSE = 2,
+	STEP = 3,
+	SPEED_DOWN = 4,
+	SPEED_UP = 5,
+	PRINT_INSTRUCTIONS = 6,
+	PRINT_REGISTERS = 7,
+	QUIRK_SHIFT = 8,
+	QUIRK_I = 9
+} COMMAND;
+
 void initializeState();
 void* updateTimers(void*);
 unsigned char mapKey(int);
@@ -16,6 +31,7 @@ void createDrawWindow();
 void createMessageWindow();
 void createRegisterWindow();
 void clearScreen();
+COMMAND parseCommandKey(unsigned char);
 
 // main memory
 extern unsigned char* mem;
