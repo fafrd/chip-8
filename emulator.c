@@ -92,6 +92,8 @@ void loop(unsigned int emulationSpeed)
 	COMMAND com = UNDEFINED;
 	bool paused = false;
 	bool step = false;
+	bool printInstructions = false;
+	bool printRegisters = true;
 
 	while (1)
 	{
@@ -100,7 +102,17 @@ void loop(unsigned int emulationSpeed)
 		createDrawWindow();
 
 		// update register state
-		createRegisterWindow();
+		if (printRegisters)
+		{
+			createRegisterWindow();
+		}
+		else if (registerWin != NULL)
+		{
+			wclear(registerWin);
+			wrefresh(registerWin);
+			registerWin = NULL;
+
+		}
 
 		// delay between each instruction
 		usleep(delayTime);
@@ -147,7 +159,7 @@ commandParser:
 		
 			case ESCAPE:
 				exit(0);
-			    break;
+				break;
 			case PAUSE:
 				if (paused)
 				{
@@ -166,37 +178,91 @@ commandParser:
 					com = parseCommandKey(getch());
 					goto commandParser;
 				}
-			    break;
+				break;
 			case STEP:
 				wprintw(messageWin, "Step...\n");
 				wrefresh(messageWin);
 				paused = false;
 				step = true;
-			    break;
+				break;
 			case SPEED_DOWN:
-				
-			    break;
+				if (delayTime < 1000000 - 1000)
+				{
+					delayTime += 1000;
+					wprintw(messageWin, "Instruction delay inrceased from %d to %d\n", delayTime-1000, delayTime);
+					wrefresh(messageWin);
+				}
+				break;
 			case SPEED_UP:
-				
-			    break;
+				if (delayTime > 1000)
+				{
+					delayTime -= 1000;
+					wprintw(messageWin, "Instruction delay inrceased from %d to %d\n", delayTime+1000, delayTime);
+					wrefresh(messageWin);
+				}
+				break;
 			case PRINT_INSTRUCTIONS:
-				
-			    break;
+				if (!printInstructions)
+				{
+					printInstructions = true;
+					wprintw(messageWin, "Instruction printing enabled.\n");
+					wrefresh(messageWin);
+				}
+				else
+				{
+					printInstructions = false;
+					wprintw(messageWin, "Instruction printing disabled.\n");
+					wrefresh(messageWin);
+				}
+				break;
 			case PRINT_REGISTERS:
-				
-			    break;
+				if (!printRegisters)
+				{
+					printRegisters = true;
+					wprintw(messageWin, "Register display enabled.\n");
+					wrefresh(messageWin);
+				}
+				else
+				{
+					printRegisters = false;
+					wprintw(messageWin, "Register display disabled.\n");
+					wrefresh(messageWin);
+				}	
+				break;
 			case QUIRK_SHIFT:
-				
-			    break;
+				if (!QUIRK_SHIFT_RESULT_IN_VY)
+				{
+					QUIRK_SHIFT_RESULT_IN_VY = true;
+					wprintw(messageWin, "Instructions 8xy6, 8xye will now place the result of the shift operation into register y.\n");
+					wrefresh(messageWin);
+				}
+				else
+				{
+					QUIRK_SHIFT_RESULT_IN_VY = false;
+					wprintw(messageWin, "Instructions 8xy6, 8xye will now place the result of the shift operation into register x.\n");
+					wrefresh(messageWin);
+				}
+				break;
 			case QUIRK_I:
-				
-			    break;
+				if (!QUIRK_SET_I_AFTER_LOAD_STORE)
+				{
+					QUIRK_SET_I_AFTER_LOAD_STORE = true;
+					wprintw(messageWin, "Instructions fx55, fx65 will now set the I register to i + vx + 1.\n");
+					wrefresh(messageWin);
+				}
+				else
+				{
+					QUIRK_SET_I_AFTER_LOAD_STORE = false;
+					wprintw(messageWin, "Instructions fx55, fx65 will not affect the I register.\n");
+					wrefresh(messageWin);
+				}
+				break;
 		}
 
 		if (paused)
 		{
 			com = parseCommandKey(getch()); // wait on a keypress
-			goto commandParser; // bypass emulation loop if paused
+			goto commandParser; // we're paused, so bypass emulation loop, parse another command
 		}
 
 		if (step)
@@ -213,8 +279,11 @@ commandParser:
 		current_lower = mem[r_pc+1];
 		current = (((short)current_upper) << 8) | current_lower;
 
-		wprintw(messageWin, "pc: %03hx, instruction: %04hx\n", r_pc, current);
-		wrefresh(messageWin);
+		if (printInstructions)
+		{
+			wprintw(messageWin, "pc: %03hx, instruction: %04hx\n", r_pc, current);
+			wrefresh(messageWin);
+		}
 
 		// switch on first nibble (4 bits)
 		switch (current_upper >> 4)
