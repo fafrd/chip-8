@@ -106,74 +106,17 @@ void loop(unsigned int emulationSpeed)
 		usleep(delayTime);
 
 		// update key pressed state
+		com = UNDEFINED;
 		if (kbhit())
 		{
 			int ch = getchar();
 			unsigned char keyHit = mapKey(ch);
 			//wprintw(messageWin, "key: %c, keyhit: %x\n", ch, keyHit);
 			//wrefresh(messageWin);
-			com = UNDEFINED; // reset
 			if (keyHit != 0xff)
 				updateKeyState(keyHit);
 			else
 				com = parseCommandKey(ch);
-
-			//wprintw(messageWin, "com: %d\n", com);
-			//wrefresh(messageWin);
-commandParser:
-			switch (com)
-			{
-			
-				case ESCAPE:
-					exit(0);
-				    break;
-				case PAUSE:
-					if (paused)
-					{
-						wprintw(messageWin, "Emulation resumed.\n");
-						wrefresh(messageWin);
-						// if already paused, unpause
-						paused = false;
-						break;
-					}
-					else
-					{
-						wprintw(messageWin, "Emulation paused.\n");
-						wrefresh(messageWin);
-						paused = true;
-						// wait for a new key. when something happens, reenter this statement
-						com = parseCommandKey(getch());
-						goto commandParser;
-					}
-				    break;
-				case STEP:
-					step = true;
-				    break;
-				case SPEED_DOWN:
-					
-				    break;
-				case SPEED_UP:
-					
-				    break;
-				case PRINT_INSTRUCTIONS:
-					
-				    break;
-				case PRINT_REGISTERS:
-					
-				    break;
-				case QUIRK_SHIFT:
-					
-				    break;
-				case QUIRK_I:
-					
-				    break;
-			}
-
-			if (paused)
-			{
-				com = parseCommandKey(getch()); // wait on a keypress
-				goto commandParser; // bypass emulation loop if paused
-			}
 
 			keyResetCounter = 0;
 		}
@@ -196,6 +139,73 @@ commandParser:
 				keyResetCounter++;
 			}
 		}
+commandParser:
+		//wprintw(messageWin, "com: %d\n", com);
+		//wrefresh(messageWin);
+		switch (com)
+		{
+		
+			case ESCAPE:
+				exit(0);
+			    break;
+			case PAUSE:
+				if (paused)
+				{
+					wprintw(messageWin, "Emulation resumed.\n");
+					wrefresh(messageWin);
+					// if already paused, unpause
+					paused = false;
+					break;
+				}
+				else
+				{
+					wprintw(messageWin, "Emulation paused.\n");
+					wrefresh(messageWin);
+					paused = true;
+					// wait for a new key. when something happens, reenter this statement
+					com = parseCommandKey(getch());
+					goto commandParser;
+				}
+			    break;
+			case STEP:
+				wprintw(messageWin, "Step...\n");
+				wrefresh(messageWin);
+				paused = false;
+				step = true;
+			    break;
+			case SPEED_DOWN:
+				
+			    break;
+			case SPEED_UP:
+				
+			    break;
+			case PRINT_INSTRUCTIONS:
+				
+			    break;
+			case PRINT_REGISTERS:
+				
+			    break;
+			case QUIRK_SHIFT:
+				
+			    break;
+			case QUIRK_I:
+				
+			    break;
+		}
+
+		if (paused)
+		{
+			com = parseCommandKey(getch()); // wait on a keypress
+			goto commandParser; // bypass emulation loop if paused
+		}
+
+		if (step)
+		{
+			step = false;
+			paused = true;
+		}
+
+
 
 		// set current instruction...
 		// instructions are 2 bytes, get upper+lower byte, combine
@@ -203,8 +213,8 @@ commandParser:
 		current_lower = mem[r_pc+1];
 		current = (((short)current_upper) << 8) | current_lower;
 
-		//wprintw(messageWin, "pc: %03hx, instruction: %04hx\n", r_pc, current);
-		//wrefresh(messageWin);
+		wprintw(messageWin, "pc: %03hx, instruction: %04hx\n", r_pc, current);
+		wrefresh(messageWin);
 
 		// switch on first nibble (4 bits)
 		switch (current_upper >> 4)
