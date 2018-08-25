@@ -20,6 +20,29 @@ bool loadRomToMemory(unsigned char **buffer, size_t length)
 	return true;
 }
 
+void intro()
+{
+	mvwprintw(drawWin, 4, 6, "CHIP-8 INTERPRETER");
+	mvwprintw(drawWin, 5, 10, "by kian");
+	mvwprintw(drawWin, 5, 10, "by kian");
+
+	mvwprintw(drawWin,  7, 6, "controls:");
+	mvwprintw(drawWin,  8, 6, "  esc             exit program");
+	mvwprintw(drawWin,  9, 6, "  space           pause/resume emulation");
+	mvwprintw(drawWin, 10, 6, "/ slash           step emulation");
+	mvwprintw(drawWin, 11, 6, ", comma           reduce emulation speed");
+	mvwprintw(drawWin, 12, 6, ". period          increase emulation speed");
+	mvwprintw(drawWin, 13, 6, "; semicolon       toggle live printing of instructions");
+	mvwprintw(drawWin, 14, 6, "' apostrophe      toggle live display of register");
+	mvwprintw(drawWin, 15, 6, "[  left bracket   set shift result quirk");
+	mvwprintw(drawWin, 16, 6, "]  right bracket  set i register quirk");
+
+	mvwprintw(drawWin, 28, 32, "Press any key to begin...");
+
+	wrefresh(drawWin);
+	getchar();
+}
+
 // main instruction processing loop
 void loop(unsigned int emulationSpeed)
 {
@@ -54,24 +77,8 @@ void loop(unsigned int emulationSpeed)
 	int keyResetCounter = 0;
 	const int counterMax = 50;
 
-	mvwprintw(drawWin, 4, 10, "CHIP-8 INTERPRETER");
-	mvwprintw(drawWin, 5, 14, "by kian");
-	wrefresh(drawWin);
-	mvwprintw(drawWin, 6, 18, ".");
-	wrefresh(drawWin);
-	usleep(300000);
-	mvwprintw(drawWin, 6, 18, " .");
-	wrefresh(drawWin);
-	usleep(300000);
-	mvwprintw(drawWin, 6, 18, "  .");
-	wrefresh(drawWin);
-	usleep(300000);
-	mvwprintw(drawWin, 6, 18, "   .");
-	wrefresh(drawWin);
-	usleep(300000);
-	mvwprintw(drawWin, 6, 18, "    .");
-	wrefresh(drawWin);
-	usleep(300000);
+	// show splash screen
+	intro();
 
 	wprintw(messageWin, "Starting interpreter.\n");
 	wrefresh(messageWin);
