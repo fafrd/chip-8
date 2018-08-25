@@ -8,5 +8,6 @@ void dumpKeyState();
 bool xorToPoint(int, int, bool);
 bool kbhit();
 bool validPC(unsigned short);
+void exitProgram(int);
 
 #endif

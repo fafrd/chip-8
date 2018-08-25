@@ -111,7 +111,6 @@ void loop(unsigned int emulationSpeed)
 			wclear(registerWin);
 			wrefresh(registerWin);
 			registerWin = NULL;
-
 		}
 
 		// delay between each instruction
@@ -158,7 +157,7 @@ commandParser:
 		{
 		
 			case ESCAPE:
-				exit(0);
+				exitProgram(0);
 				break;
 			case PAUSE:
 				if (paused)
@@ -627,7 +626,7 @@ commandParser:
 		}
 	}
 
-	endwin(); // exit ncurses mode
+	exitProgram(0);
 }
 
 void printUsage()
@@ -737,5 +736,5 @@ int main(int argc, char *argv[])
 	}
 
 	free(buffer);
-	return retval;
+	exitProgram(retval);
 }

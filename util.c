@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h> 
 #include <ncurses.h>
 #include <unistd.h>
@@ -139,4 +140,13 @@ unsigned char* getVxReg(unsigned char x)
 		default:
 			printf("Bad input to getVxReg: %x", x);
 	}
+}
+
+void exitProgram(int returnval)
+{
+	delwin(drawWin);
+	delwin(messageWin);
+	delwin(registerWin);
+	endwin();
+	exit(returnval);
 }
