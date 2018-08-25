@@ -142,11 +142,12 @@ unsigned char* getVxReg(unsigned char x)
 	}
 }
 
-void exitProgram(int returnval)
+void exitProgram(int returnval, char *message)
 {
 	delwin(drawWin);
 	delwin(messageWin);
 	delwin(registerWin);
 	endwin();
+	printf("%s\n", message);
 	exit(returnval);
 }

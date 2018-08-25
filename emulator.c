@@ -164,7 +164,7 @@ commandParser:
 		{
 		
 			case ESCAPE:
-				exitProgram(0);
+				exitProgram(0, "Emulation halted.");
 				break;
 			case PAUSE:
 				if (paused)
@@ -633,7 +633,7 @@ commandParser:
 		}
 	}
 
-	exitProgram(0);
+	exitProgram(0, "Emulation complete");
 }
 
 void printUsage()
@@ -743,5 +743,5 @@ int main(int argc, char *argv[])
 	}
 
 	free(buffer);
-	exitProgram(retval);
+	exitProgram(retval, "");
 }

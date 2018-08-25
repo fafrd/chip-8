@@ -150,8 +150,9 @@ void i_1nnn(unsigned short nnn)
 {
 	if (!validPC(nnn - 2))
 	{
-		printf("unsafe PC destination requested: %hx. cannot continue.\n", nnn - 2);
-		exit(1);
+		char exitMessage[80];
+		sprintf(exitMessage, "unsafe PC destination requested: %hx. cannot continue.", nnn - 2);
+		exitProgram(1, exitMessage);
 	}
 
 	r_pc = nnn;
@@ -163,8 +164,9 @@ void i_bnnn(unsigned short nnn)
 {
 	if (!validPC(nnn + r_v0 - 2))
 	{
-		printf("unsafe PC destination requested: %hx. cannot continue.\n", nnn + r_v0 - 2);
-		exit(1);
+		char exitMessage[80];
+		sprintf(exitMessage, "unsafe PC destination requested: %hx. cannot continue.", nnn + r_v0 - 2);
+		exitProgram(1, exitMessage);
 	}
 
 	r_pc = nnn + r_v0;
@@ -179,8 +181,9 @@ void i_2nnn(unsigned short nnn)
 	// prevent stack overflow
 	if (r_sp > STACK_SIZE)
 	{
-		printf("reached maximum stack size of %u. cannot continue.\n", STACK_SIZE);
-		exit(1);
+		char exitMessage[80];
+		sprintf(exitMessage, "reached maximum stack size of %u. cannot continue.", STACK_SIZE);
+		exitProgram(1, exitMessage);
 	}
 
 	// increment stack pointer, push current location to the stack

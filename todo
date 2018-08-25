@@ -28,9 +28,9 @@ done
 - check if file exists before running
 
 todo
-- pre-emulation, wait for keypress to continue. pre-emulation screen should explain controls.
 - change speed controls should work more intelligently
 	- delay timer should be related to emulation speed. (delay/sound sleep calculated as a fraction of global speed variable?)
+	- actually, timers should probably just decrement once per loop tbh
 - how do i implement sound? terminal ding?
 
 backlog
