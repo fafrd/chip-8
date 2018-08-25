@@ -29,17 +29,11 @@ done
 
 todo
 - pre-emulation, wait for keypress to continue. pre-emulation screen should explain controls.
-- create controls
-	- pause/resume/step
-	- do/don't display debug registers/verbose debug text. (off by default)
-	- halt emulation
-	- modifying emulation speed
-		- delay timer should be related to emulation speed. (delay/sound sleep calculated as a fraction of global speed variable?)
-	- emulation quirks
-- investigate fx55, fx65... some references define these differently
-- create unit tests for instructions. test edge cases!
+- change speed controls should work more intelligently
+	- delay timer should be related to emulation speed. (delay/sound sleep calculated as a fraction of global speed variable?)
+- halt emulation should not leave terminal in a broken state (how??)
 - how do i implement sound? terminal ding?
 
 backlog
-- merge 'run', 'disassemble' methods? not sure...
 - generalize GUI code to allow a different gui framework
+- improve unit test coverage. test edge cases!
