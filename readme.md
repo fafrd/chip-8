@@ -43,15 +43,15 @@ Game controls
 
 Emulation controls
 
-      esc             exit program
-      space           pause/resume emulation
-    / slash           step emulation
-    , comma           reduce emulation speed
-    . period          increase emulation speed
-    ; semicolon       toggle live printing of instructions
-    ' apostrophe      toggle live display of registers
-    [  left bracket   set shift result quirk (affects instructions 8xy6, 8xye)
-    ]  right bracket  set i register quirk (affects instructions fx55, fx65)
+      esc            exit program
+      space          pause/resume emulation
+    / slash          step emulation
+    , comma          reduce emulation speed
+    . period         increase emulation speed
+    ; semicolon      toggle live printing of instructions
+    ' apostrophe     toggle live display of registers
+    [ left bracket   set shift result quirk (affects instructions 8xy6, 8xye)
+    ] right bracket  set i register quirk (affects instructions fx55, fx65)
 
 ## testing
 
