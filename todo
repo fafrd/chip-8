@@ -1,36 +1,7 @@
-done
-- implement immediate store/load instructions, 6xnn and 8yx0
-- implement add/subtract, 8xy4 8xy5 8xy7
-- implement and or xor, 8xy2 8xy1 8xy3
-- implement shift left/right, 8xy6 8xye
-- implement jumps, 1nnn bnnn
-- implement subroutine handling, 2nnn 00ee
-- implement branching, 3xnn 5xy0 4xnn 9xy0
-- implement i-register instructions, annn fx1e
-- implement memory store/load instructions, fx55 fx65
-- disassembler
-- implement debug flag to enable/disable reg/mem dump
-- set delay timer to auto-decrement each loop
-- set audio timer to auto-decrement each loop
-- implement delay timer, fx15 fx07
-- implement sound timer, fx18
-- implement random, cxnn
-- load default hex sprites to memory 0x000-0x200
-- implement i-reg sprite instruction, fx29
-- implement binary-coded decimal fx33
-- implement keypad input mechanism
-- implement keypad instructions, fx0a ex9e exa1
-- create graphics area (64x32)
-- create graphics draw code. (each loop, read graphics array to screen)
-- implement clear screen instruction, 00e0
-- implement sprite draw instruction, dxyn
-- move debug messages into messageWindow
-- check if file exists before running
-
 todo
-- change speed controls should work more intelligently
-	- delay timer should be related to emulation speed. (delay/sound sleep calculated as a fraction of global speed variable?)
-	- actually, timers should probably just decrement once per loop tbh
+- figure out why the screen blinks when i first press pause, but not subsequently
+- delay timer should be related to emulation speed. (delay/sound sleep calculated as a fraction of global speed variable?)
+	- or maybe, timers should just decrement once per loop...
 - how do i implement sound? terminal ding?
 
 backlog

@@ -142,6 +142,11 @@ unsigned char* getVxReg(unsigned char x)
 	}
 }
 
+useconds_t calculateDelay(unsigned int hz)
+{
+	return 1000000 / hz;
+}
+
 void exitProgram(int returnval, char *message)
 {
 	delwin(drawWin);

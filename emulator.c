@@ -24,7 +24,6 @@ void intro()
 {
 	mvwprintw(drawWin, 4, 6, "CHIP-8 INTERPRETER");
 	mvwprintw(drawWin, 5, 10, "by kian");
-	mvwprintw(drawWin, 5, 10, "by kian");
 
 	mvwprintw(drawWin,  7, 6, "controls:");
 	mvwprintw(drawWin,  8, 6, "  esc            exit program");
@@ -44,7 +43,7 @@ void intro()
 }
 
 // main instruction processing loop
-void loop(unsigned int emulationSpeed)
+void loop(unsigned int hz)
 {
 	initscr(); // start curses mode
 
@@ -88,12 +87,10 @@ void loop(unsigned int emulationSpeed)
 	unsigned char current_upper, current_lower;
 	unsigned short current;
 
-	// set wait time between cpu cycles
-	useconds_t delayTime;
-	if (emulationSpeed > 0)
-		delayTime = 1000000 / emulationSpeed;
-	else
-		delayTime = 3333; // 300hz
+	// set wait time between cpu cycles (default 300hz)
+	if (hz < 1)
+		hz = 300;
+	useconds_t delayTime = calculateDelay(hz);
 
 	// initialize variable containing emulation command requested
 	COMMAND com = UNDEFINED;
@@ -192,18 +189,35 @@ commandParser:
 				step = true;
 				break;
 			case SPEED_DOWN:
-				if (delayTime < 1000000 - 1000)
+				if (hz > 10)
 				{
-					delayTime += 1000;
-					wprintw(messageWin, "Instruction delay inrceased from %d to %d\n", delayTime-1000, delayTime);
+					hz -= 10;
+					delayTime = calculateDelay(hz);
+					wprintw(messageWin, "CPU speed decreased from %dhz to %dhz\n", hz+10, hz);
+					wrefresh(messageWin);
+				}
+				else if (hz > 1)
+				{
+					hz--;
+					delayTime = calculateDelay(hz);
+					wprintw(messageWin, "CPU speed decreased from %dhz to %dhz\n", hz+1, hz);
 					wrefresh(messageWin);
 				}
 				break;
 			case SPEED_UP:
-				if (delayTime > 1000)
+				if (hz < 10)
 				{
-					delayTime -= 1000;
-					wprintw(messageWin, "Instruction delay inrceased from %d to %d\n", delayTime+1000, delayTime);
+					hz++;
+					delayTime = calculateDelay(hz);
+					wprintw(messageWin, "CPU speed increased from %dhz to %dhz\n", hz-1, hz);
+					wrefresh(messageWin);
+
+				}
+				else if (hz < 999990)
+				{
+					hz += 10;
+					delayTime = calculateDelay(hz);
+					wprintw(messageWin, "CPU speed increased from %dhz to %dhz\n", hz-10, hz);
 					wrefresh(messageWin);
 				}
 				break;
@@ -276,8 +290,6 @@ commandParser:
 			step = false;
 			paused = true;
 		}
-
-
 
 		// set current instruction...
 		// instructions are 2 bytes, get upper+lower byte, combine
